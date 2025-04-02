@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -32,7 +34,7 @@ public class Transaction {
     private String transactionDescription;
 
     @JacksonXmlProperty(localName = "date_transaction")
-    private Date dateTransaction;
+    private String dateTransaction;
 
     @JacksonXmlProperty(localName = "teller")
     private String teller;
@@ -56,7 +58,7 @@ public class Transaction {
     private String transmodeComment;
 
     @JacksonXmlProperty(localName = "amount_local")
-    private Double amountLocal;
+    private BigDecimal amountLocal;
 
     @JacksonXmlProperty(localName = "t_from_my_client")
     private TFromMyClient tFromMyClient;

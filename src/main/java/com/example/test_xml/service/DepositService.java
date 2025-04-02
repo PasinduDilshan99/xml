@@ -38,7 +38,7 @@ public class DepositService {
                 "A.",             // middleName
                 "Dr.",            // prefix
                 "Doe",            // lastName
-                Date.valueOf(LocalDate.now()), // birthdate
+                null, // birthdate
                 "New York",       // birthPlace
                 "Jane Doe",       // mothersName
                 "JD",             // alias
@@ -68,6 +68,7 @@ public class DepositService {
                 ContactTypes.BUSN, // addressType
                 "123 Main St",     // address
                 "New York",        // town
+                null,
                 "10001",           // zip
                 CountryCodes.MA,   // country_code
                 "NY",              // State
@@ -88,7 +89,7 @@ public class DepositService {
                 null,   // valueDate
                 ConductionTypes.EMAL,  // transmodeCode
                 "Handled in person",   // transmodeComment
-                1500.75,               // amountLocal
+                null,               // amountLocal
                 new TFromMyClient(),   // tFromMyClient
 null        ,        "Electronics Purchase", // goodsServices
                 "Urgent transaction"   // comments

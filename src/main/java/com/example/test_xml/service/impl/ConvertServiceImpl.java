@@ -2,10 +2,7 @@ package com.example.test_xml.service.impl;
 
 import com.example.test_xml.model.enums.*;
 import com.example.test_xml.model.enums.db.UserTypes;
-import com.example.test_xml.model.response.CommonDetails;
-import com.example.test_xml.model.response.CustomerDetails;
-import com.example.test_xml.model.response.MerchantDetails;
-import com.example.test_xml.model.response.ReSellerDetails;
+import com.example.test_xml.model.response.*;
 import com.example.test_xml.model.xmlDto.TAddress;
 import com.example.test_xml.model.xmlDto.TPhone;
 import com.example.test_xml.model.xmlDto.from.FromEntity;
@@ -15,15 +12,28 @@ import com.example.test_xml.model.xmlDto.pae.TEntityMyClient;
 import com.example.test_xml.model.xmlDto.pae.TPersonMyClient;
 import com.example.test_xml.model.xmlDto.to.TToMyClient;
 import com.example.test_xml.model.xmlDto.to.ToAccount;
+import com.example.test_xml.service.CommonMethodService;
 import com.example.test_xml.service.ConvertService;
+import com.example.test_xml.service.validations.TPersonMyClientValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ConvertServiceImpl implements ConvertService {
 
     private final Logger logger = LoggerFactory.getLogger(ConvertServiceImpl.class);
+
+    private final CommonMethodService commonMethodService;
+    private final TPersonMyClientValidation tPersonMyClientValidation;
+
+    @Autowired
+    public ConvertServiceImpl(CommonMethodService commonMethodService,
+                              TPersonMyClientValidation tPersonMyClientValidation) {
+        this.commonMethodService = commonMethodService;
+        this.tPersonMyClientValidation = tPersonMyClientValidation;
+    }
 
     @Override
     public CommonDetails mapCustomerToCommon(CustomerDetails customer) {
@@ -237,7 +247,7 @@ public class ConvertServiceImpl implements ConvertService {
                 fromEntity.setPhone(new TPhone(ContactTypes.BUSN, CommunicationTypes.LNPH, "94", from.getBusinessPhonePrimary(), null, null));
             }
         }
-        fromEntity.setAddress(new TAddress(ContactTypes.BUSN, from.getAddressLine1() + from.getAddressLine2() +from.getAddressLine3(), null, from.getCity(), null, CountryCodes.LK.toString(), null, null)); //
+        fromEntity.setAddress(new TAddress(ContactTypes.BUSN, from.getAddressLine1() + from.getAddressLine2() +from.getAddressLine3(), null,null, from.getCity(), null, CountryCodes.LK.toString(), null, null)); //
         fromEntity.setEmail(from.getBusinessEmail()); //
         fromEntity.setUrl(from.getWebAddress());
         fromEntity.setIncorporationState(null);
@@ -256,27 +266,29 @@ public class ConvertServiceImpl implements ConvertService {
         FromPerson fromPerson = new FromPerson();
         fromPerson.setGender(null);
         fromPerson.setTitle(null);
-        fromPerson.setFirstName(from.getFirstName()); //
+        ExtractNameResponse extractNameResponse = commonMethodService.extractFirstNameAndLastName(from.getFirstName());
+        fromPerson.setFirstName(extractNameResponse.getFirstName()); //
         fromPerson.setMiddleName(null);
         fromPerson.setPrefix(null);
-        fromPerson.setLastName(null); //
+        fromPerson.setLastName(extractNameResponse.getLastName().toUpperCase()); //
         fromPerson.setBirthdate(String.valueOf(from.getBirthdate())); //
         fromPerson.setBirthPlace(null);
-        fromPerson.setMothersName(from.getMothersName());
+//        fromPerson.setMothersName(commonMethodService.decodeBase64(from.getMothersName()));
         fromPerson.setAlias(null);
-        fromPerson.setSsn(from.getIdNumber()); //
+        fromPerson.setSsn(from.getIdNumber()); //NIC
         fromPerson.setPassports(null);
         fromPerson.setIdNumber(null);
-        fromPerson.setNationality1(from.getNationality1()); // used category
+//        fromPerson.setNationality1(commonMethodService.convertNationality(from.getNationality1())); // used category
         fromPerson.setNationality2(null);
         fromPerson.setNationality3(null);
         fromPerson.setResidence(from.getResidenceCategory()); // used category
-        fromPerson.setPhone(new TPhone(ContactTypes.PRVT, CommunicationTypes.MOPH, "94", from.getPhonesPrimary(), null, null));
-        fromPerson.setAddress(new TAddress(ContactTypes.PERM, from.getAddressLine1() + from.getAddressLine2() + from.getAddressLine3(), null, from.getCity(), null, CountryCodes.LK.toString(), null, null)); //
+//        fromPerson.setPhone(new TPhone(ContactTypes.PRVT, CommunicationTypes.MOPH, "94", from.getPhonesPrimary(), null, null));
+        fromPerson.setPhone(null);
+//        fromPerson.setAddress(new TAddress(ContactTypes.PERM, from.getAddressLine1() + from.getAddressLine2() + from.getAddressLine3(), null, from.getCity(), null, CountryCodes.LK.toString(), null, null)); //
         fromPerson.setEmail(from.getEmail());
         fromPerson.setOccupation(from.getOccupation()); //
         fromPerson.setEmployerName(from.getEmployerName());
-        fromPerson.setEmployerAddressId(new TAddress(ContactTypes.PERM, from.getEmployerAddress(), null, null, null, CountryCodes.LK.toString(), null, null));
+//        fromPerson.setEmployerAddressId(new TAddress(ContactTypes.PERM, from.getEmployerAddress(), null, null, null, CountryCodes.LK.toString(), null, null));
         fromPerson.setEmployerPhoneId(null);
         fromPerson.setIdentification(null);
         fromPerson.setDeceased(null);
@@ -284,6 +296,7 @@ public class ConvertServiceImpl implements ConvertService {
         fromPerson.setTaxRegNumber(null);
         fromPerson.setSourceOfWealth(null);
         fromPerson.setComments(null);
+//        tPersonMyClientValidation.validateTPersonMyClient(fromPerson);
         return fromPerson;
     }
 
@@ -324,11 +337,12 @@ public class ConvertServiceImpl implements ConvertService {
         toAccount.setBeneficiary(null);
         toAccount.setBeneficiaryComment(null);
         toAccount.setComments(null);
-        if (to.getUserType().equals(UserTypes.CUSTOMER)) {
-            toAccount.setSignatory(createTPersonClientForTo(to));
-        } else if (to.getUserType().equals(UserTypes.MERCHANT) || to.getUserType().equals(UserTypes.RETAILER)) {
-            toAccount.setTEntity(createTEntityMyClientForTo(to));
-        }
+        toAccount.setTEntity(createTEntityMyClientForTo(to));
+//        if (to.getUserType().equals(UserTypes.CUSTOMER)) {
+//            toAccount.setSignatory(createTPersonClientForTo(to));
+//        } else if (to.getUserType().equals(UserTypes.MERCHANT) || to.getUserType().equals(UserTypes.RETAILER)) {
+//            toAccount.setTEntity(createTEntityMyClientForTo(to));
+//        }
         return toAccount;
     }
 
@@ -352,11 +366,11 @@ public class ConvertServiceImpl implements ConvertService {
         tPersonMyClient.setNationality3(null);
         tPersonMyClient.setResidence(to.getResidenceCategory()); // used category
         tPersonMyClient.setPhone(new TPhone(ContactTypes.PRVT, CommunicationTypes.MOPH, "94", to.getPhonesPrimary(), null, null));
-        tPersonMyClient.setAddress(new TAddress(ContactTypes.UNKNOWN, to.getAddressLine1() + to.getAddressLine2() + to.getAddressLine3(), null, to.getCity(), null, CountryCodes.LK.toString(), null, null)); //
+//        tPersonMyClient.setAddress(new TAddress(ContactTypes.UNKNOWN, to.getAddressLine1() + to.getAddressLine2() + to.getAddressLine3(), null, to.getCity(), null, CountryCodes.LK.toString(), null, null)); //
         tPersonMyClient.setEmail(to.getEmail());
         tPersonMyClient.setOccupation(to.getOccupation()); //
         tPersonMyClient.setEmployerName(to.getEmployerName());
-        tPersonMyClient.setEmployerAddressId(new TAddress(ContactTypes.UNKNOWN, to.getEmployerAddress(), null, null, null, CountryCodes.LK.toString(), null, null));
+//        tPersonMyClient.setEmployerAddressId(new TAddress(ContactTypes.UNKNOWN, to.getEmployerAddress(), null, null, null, CountryCodes.LK.toString(), null, null));
         tPersonMyClient.setEmployerPhoneId(null);
         tPersonMyClient.setIdentification(null);
         tPersonMyClient.setDeceased(null);
@@ -381,7 +395,7 @@ public class ConvertServiceImpl implements ConvertService {
                 tEntityMyClient.setPhone(new TPhone(ContactTypes.BUSN, CommunicationTypes.LNPH, "94", to.getBusinessPhonePrimary(), null, null));
             }
         }
-        tEntityMyClient.setAddress(new TAddress(ContactTypes.UNKNOWN, to.getAddressLine1() + to.getAddressLine2() + to.getAddressLine3(), null, to.getCity(), null, CountryCodes.LK.toString(), null, null)); //
+//        tEntityMyClient.setAddress(new TAddress(ContactTypes.UNKNOWN, to.getAddressLine1() + to.getAddressLine2() + to.getAddressLine3(), null, to.getCity(), null, CountryCodes.LK.toString(), null, null)); //
         tEntityMyClient.setEmail(to.getBusinessEmail()); //
         tEntityMyClient.setUrl(to.getWebAddress());
         tEntityMyClient.setIncorporationState(null);

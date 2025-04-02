@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -12,9 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class ModifyUserTypesResponse {
     private int transactionId;
-    private int txnAmount;
+    private BigDecimal txnAmount;
     private String transactionDescription;
-    private Date dateTransaction;
+    private Timestamp dateTransaction;
     private String transmodeCode;
     private String transactionNumber;
     private UserTypes fromUserTypes;

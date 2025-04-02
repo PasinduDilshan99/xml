@@ -52,13 +52,13 @@ public class TEntityMyClient {
     private DirectorId directorId;
 
     @JacksonXmlProperty(localName = "incorporation_date")
-    private Date incorporationDate;
+    private String incorporationDate;
 
     @JacksonXmlProperty(localName = "business_closed")
     private Boolean businessClosed;
 
     @JacksonXmlProperty(localName = "date_business_closed")
-    private Date dateBusinessClosed;
+    private String dateBusinessClosed;
 
     @JacksonXmlProperty(localName = "tax_number")
     private String taxNumber;

@@ -35,7 +35,7 @@ public class TPersonRegistrationInReport {
     private String lastName;
 
     @JacksonXmlProperty(localName = "birthdate")
-    private Date birthdate;
+    private String birthdate;
 
     @JacksonXmlProperty(localName = "birth_place")
     private String birthPlace;

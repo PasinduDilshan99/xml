@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -197,9 +198,9 @@ public class CommonServiceImpl implements CommonService {
         for (Transactions transactions1 : transactions) {
             Transaction transaction = new Transaction();
             transaction.setTransactionNumber(transactions1.getTransactionNumber());
-            transaction.setAmountLocal((double) transactions1.getTxnAmount());
+            transaction.setAmountLocal(transactions1.getTxnAmount());
             transaction.setTransactionDescription(transactions1.getTransactionDescription());
-            transaction.setDateTransaction(transactions1.getDateTransaction());
+            transaction.setDateTransaction(transactions1.getDateTransaction().toString());
             if (transactions1.getTransmodeCode().equals("TXN")) {
                 transaction.setTransmodeCode(ConductionTypes.AGNT);
             } else {
@@ -216,15 +217,15 @@ public class CommonServiceImpl implements CommonService {
                 153, //
                 "Head Office",
                 SubmissionTypes.E, //
-                ReportCodes.CTR, //
+                ReportCodes.EFT, //
                 null,
                 null,
-                new Date(System.currentTimeMillis()), //
+                String.valueOf(new Timestamp(System.currentTimeMillis())), //
                 Currencies.LKR,
                 reportingPerson,
                 new TAddress(ContactTypes.CORS,
                         "148/15, Lesley Ranagala Mw, Baseline Road, Colombo 08",
-                        null,
+                        null,null,
                         "Colombo",
                         null,
                         CountryCodes.LK.toString(),
@@ -233,7 +234,7 @@ public class CommonServiceImpl implements CommonService {
                 null,
                 null,
                 transactionList, //
-                new ReportIndicator(ReportIndicatorTypes.CTR) //
+                new ReportIndicator(ReportIndicatorTypes.EFT) //
         );
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

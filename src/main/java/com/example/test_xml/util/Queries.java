@@ -16,11 +16,11 @@ public class Queries {
                 uw_to.WALLET_TYPE AS TO_WALLET_TYPE,
                 ua_to.ACC_TYPE AS TO_ACC_TYPE,
                 ua_to.ACC_NO AS TO_ACC_NO
-            FROM MWT_WALLET_TRANSACTIONS t
-            JOIN MWT_USER_ACCOUNT ua_from ON t.A_NUMBER = ua_from.ACC_NO
-            JOIN MWT_USER_WALLET uw_from ON t.A_NUMBER = uw_from.ACC_ID
-            JOIN MWT_USER_ACCOUNT ua_to ON t.B_NUMBER = ua_to.ACC_NO
-            JOIN MWT_USER_WALLET uw_to ON t.B_NUMBER = uw_to.ACC_ID
+            FROM mwalletuser.MWT_WALLET_TRANSACTIONS t
+            JOIN mwalletuser.MWT_USER_ACCOUNT ua_from ON t.A_NUMBER = ua_from.ACC_NO
+            JOIN mwalletuser.MWT_USER_WALLET uw_from ON t.A_NUMBER = uw_from.ACC_ID
+            JOIN mwalletuser.MWT_USER_ACCOUNT ua_to ON t.B_NUMBER = ua_to.ACC_NO
+            JOIN mwalletuser.MWT_USER_WALLET uw_to ON t.B_NUMBER = uw_to.ACC_ID
             WHERE t.TXN_AMOUNT >= 100000000
             """;
 
@@ -72,39 +72,39 @@ public class Queries {
                 md.SETTLEMENT_METHOD AS settlement_method,
                 md.SOURCE_OF_INCOME AS source_of_income,
                 md.SOURCE_OF_INCOME_OTHER AS other_source_of_income
-            FROM MWT_USER_WALLET_DETAILS uw
-            JOIN MWT_MERCHANT_DETAILS md ON uw.ACC_ID = md.ACC_ID
+            FROM mwalletuser.MWT_USER_WALLET_DETAILS uw
+            JOIN mwalletuser.MWT_MERCHANT_DETAILS md ON uw.ACC_ID = md.ACC_ID
             WHERE uw.ACC_ID IN (%s)
             """;
 
     public static final String GET_CUSTOMER_DETAILS = """
             SELECT
-                                                                     ACC_ID AS id,
-                                                                     NAME AS first_name,
-                                                                     ADDR_NAME AS address_name,
-                                                                     ADDR_LINE1 AS address_line1,
-                                                                     ADDR_LINE2 AS address_line2,
-                                                                     ADDR_LINE3 AS address_line3,
-                                                                     SHORT_NAME AS alias,
-                                                                     TITLE AS title,
-                                                                     NIC_NO AS id_number,
-                                                                     DOB AS birthdate,
-                                                                     MOTHER_NAME AS mothers_name,
-                                                                     NATIONALITY AS nationality1,
-                                                                     CITY AS city,
-                                                                     DISTRICT AS state,
-                                                                     CONTACT_NO1 AS phones_primary,
-                                                                     CONTACT_NO2 AS phones_secondary,
-                                                                     EMAIL AS email,
-                                                                     OCCUPATION AS occupation,
-                                                                     NAME_OF_EMP AS employer_name,
-                                                                     ADDR_OF_EMP AS employer_address,
-                                                                     SOR_OF_INCOME AS source_of_wealth,
-                                                                     USER_VERIFIED AS user_verified,
-                                                                     DOCCUMENTS_VERIFIED AS documents_verified
-                                                                 FROM MWT_USER_WALLET_DETAILS WHERE ACC_ID IN (%s)
-                       
-            """;
+                 ACC_ID AS id,
+                 NAME AS first_name,
+                 ADDR_NAME AS address_name,
+                 ADDR_LINE1 AS address_line1,
+                 ADDR_LINE2 AS address_line2,
+                 ADDR_LINE3 AS address_line3,
+                 SHORT_NAME AS alias,
+                 TITLE AS title,
+                 NIC_NO AS id_number,
+                 DOB AS birthdate,
+                 MOTHER_NAME AS mothers_name,
+                 NATIONALITY AS nationality1,
+                 CITY AS city,
+                 DISTRICT AS state,
+                 CONTACT_NO1 AS phones_primary,
+                 CONTACT_NO2 AS phones_secondary,
+                 EMAIL AS email,
+                 OCCUPATION AS occupation,
+                 NAME_OF_EMP AS employer_name,
+                 ADDR_OF_EMP AS employer_address,
+                 SOR_OF_INCOME AS source_of_wealth,
+                 USER_VERIFIED AS user_verified,
+                 DOCCUMENTS_VERIFIED AS documents_verified
+             FROM mwalletuser.MWT_USER_WALLET_DETAILS WHERE ACC_ID IN (%s)
+
+""";
 
     public static final String GET_RESELLER_DETAILS = """
                     SELECT
@@ -152,8 +152,8 @@ public class Queries {
                         rd.SETTLEMENT_METHOD AS settlement_method,
                         rd.SOURCE_OF_INCOME AS source_of_income,
                         rd.SOURCE_OF_INCOME_OTHER AS source_of_income_other
-                    FROM MWT_USER_WALLET_DETAILS uw
-                    JOIN MWT_RESELLER_DETAILS rd ON uw.ACC_ID = rd.ACC_ID
+                    FROM mwalletuser.MWT_USER_WALLET_DETAILS uw
+                    JOIN mwalletuser.MWT_RESELLER_DETAILS rd ON uw.ACC_ID = rd.ACC_ID
                     WHERE uw.ACC_ID IN (2123, 2244, 2245,138,411,412,413)
             """;
 

@@ -37,9 +37,9 @@ public class CommonRepositoryImpl implements CommonRepository {
         try {
             return jdbcTemplate.query(SQL_QUERY, (rs, rowNum) -> new GetUserTypesResponse(
                     rs.getInt("TRANSACTION_ID"),
-                    rs.getInt("TXN_AMOUNT"),
+                    rs.getBigDecimal("TXN_AMOUNT"),
                     rs.getString("TRANSACTION_DESCRIPTION"),
-                    rs.getDate("DATE_TRANSACTION"),
+                    rs.getTimestamp("DATE_TRANSACTION"),
                     rs.getString("TRANSMODE"),
                     rs.getString("TRANSACTION_NUMBER"),
                     rs.getString("FROM_WALLET_TYPE"),

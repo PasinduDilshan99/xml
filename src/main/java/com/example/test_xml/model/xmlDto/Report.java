@@ -40,7 +40,7 @@ public class Report {
     private String fiuRefNumber;
 
     @JacksonXmlProperty(localName = "submission_date")
-    private Date submissionDate;
+    private String submissionDate;
 
     @JacksonXmlProperty(localName = "currency_code_local")
     private Currencies currencyCodeLocal;

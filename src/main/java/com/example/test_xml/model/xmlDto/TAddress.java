@@ -23,14 +23,17 @@ public class TAddress {
     @JacksonXmlProperty(localName = "town")
     private String town;
 
+    @JacksonXmlProperty(localName = "city")
+    private String city;
+
     @JacksonXmlProperty(localName = "zip")
     private String zip;
 
     @JacksonXmlProperty(localName = "country_code")
-    private CountryCodes country_code;
+    private CountryCodes countryCode;
 
     @JacksonXmlProperty(localName = "State")
-    private String State;
+    private String state;
 
     @JacksonXmlProperty(localName = "tph_contact_type")
     private String tphContactType;

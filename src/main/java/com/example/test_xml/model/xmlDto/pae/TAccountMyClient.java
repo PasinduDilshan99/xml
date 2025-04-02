@@ -7,6 +7,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @JacksonXmlRootElement(localName = "t_account_my_client")
 public class TAccountMyClient {
@@ -63,7 +65,7 @@ public class TAccountMyClient {
     private String closed;
 
     @JacksonXmlProperty(localName = "balance")
-    private Double balance;
+    private BigDecimal balance;
 
     @JacksonXmlProperty(localName = "date_balance")
     private String dateBalance;
