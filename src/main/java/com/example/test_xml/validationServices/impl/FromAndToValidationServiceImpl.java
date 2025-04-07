@@ -1,11 +1,11 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.exception.ValidationErrorException;
 import com.example.test_xml.model.xmlDto.from.TFromMyClient;
 import com.example.test_xml.model.xmlDto.to.TToMyClient;
-import com.example.test_xml.service.validations.CommonValidationService;
-import com.example.test_xml.service.validations.EnumValidationService;
-import com.example.test_xml.service.validations.FromAndToValidationService;
+import com.example.test_xml.validationServices.CommonValidationService;
+import com.example.test_xml.validationServices.EnumValidationService;
+import com.example.test_xml.validationServices.FromAndToValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

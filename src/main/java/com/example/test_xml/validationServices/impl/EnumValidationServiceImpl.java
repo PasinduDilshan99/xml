@@ -1,8 +1,8 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.exception.ValidationErrorException;
 import com.example.test_xml.model.enums.*;
-import com.example.test_xml.service.validations.EnumValidationService;
+import com.example.test_xml.validationServices.EnumValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

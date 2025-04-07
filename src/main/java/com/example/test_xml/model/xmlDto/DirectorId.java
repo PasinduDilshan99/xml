@@ -109,6 +109,4 @@ public class DirectorId {
     @JacksonXmlProperty(localName = "role")
     private EntityPersonRoleTypes role;
 
-
-
 }

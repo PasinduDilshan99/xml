@@ -5,7 +5,7 @@ public enum ReportCodes {
     EFT("Electronic Funds Transfer (EFT)"),
     IFT("International Funds Transfer (IFT)"),
     STR("Suspicious Transaction Report (STR)"),
-    AIFT("Additional Information File (AIF) - Transactions"),
+    AIFT("Additional Information File (AIF) - TransactionResponse"),
     AIFA("Additional Information File (AIF) - Activities"),
     IRD("Information Request – Domestic"),
     CFIR("Call For Information Response (CFIR)"),

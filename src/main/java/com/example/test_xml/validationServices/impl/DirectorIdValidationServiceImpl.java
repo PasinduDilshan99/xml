@@ -1,9 +1,9 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.model.xmlDto.DirectorId;
 import com.example.test_xml.model.xmlDto.Passport;
-import com.example.test_xml.service.validations.CommonValidationService;
-import com.example.test_xml.service.validations.DirectorIdValidationService;
+import com.example.test_xml.validationServices.CommonValidationService;
+import com.example.test_xml.validationServices.DirectorIdValidationService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -46,10 +46,10 @@ public class Transaction {
     private Boolean lateDeposit;
 
     @JacksonXmlProperty(localName = "date_posting")
-    private Date datePosting;
+    private String datePosting;
 
     @JacksonXmlProperty(localName = "value_date")
-    private Date valueDate;
+    private String valueDate;
 
     @JacksonXmlProperty(localName = "transmode_code")
     private ConductionTypes transmodeCode;

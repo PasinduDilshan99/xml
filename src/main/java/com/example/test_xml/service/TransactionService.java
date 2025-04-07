@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 
-public interface CommonService {
+public interface TransactionService {
     List<ModifyUserTypesResponse> getUserTypes();
 
     List<MerchantDetails> getMerchantDetails();
@@ -14,7 +14,7 @@ public interface CommonService {
 
     List<ReSellerDetails> getReSellerDetails();
 
-    List<Transactions> getTransactions();
+    List<TransactionResponse> getTransactions();
 
     String getTransactionsXml() throws JsonProcessingException;
 }

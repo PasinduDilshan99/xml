@@ -1,4 +1,4 @@
-package com.example.test_xml.service.validations;
+package com.example.test_xml.validationServices;
 
 public interface EnumValidationService {
     void validateAccountPersonRole(String role);

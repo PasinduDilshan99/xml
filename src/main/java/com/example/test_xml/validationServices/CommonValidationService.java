@@ -1,8 +1,5 @@
-package com.example.test_xml.service.validations;
+package com.example.test_xml.validationServices;
 
-import com.example.test_xml.model.enums.CountryCodes;
-import com.example.test_xml.model.enums.Currencies;
-import com.example.test_xml.model.enums.FundsTypes;
 import com.example.test_xml.model.xmlDto.*;
 
 public interface CommonValidationService {

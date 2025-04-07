@@ -1,12 +1,9 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.exception.ValidationErrorException;
-import com.example.test_xml.model.enums.CountryCodes;
-import com.example.test_xml.model.enums.Currencies;
-import com.example.test_xml.model.enums.FundsTypes;
 import com.example.test_xml.model.xmlDto.*;
-import com.example.test_xml.service.validations.CommonValidationService;
-import com.example.test_xml.service.validations.EnumValidationService;
+import com.example.test_xml.validationServices.CommonValidationService;
+import com.example.test_xml.validationServices.EnumValidationService;
 import com.example.test_xml.util.RegexPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +65,8 @@ public class CommonValidationServiceImpl implements CommonValidationService {
         }
         if (ssn != null && !ssn.isEmpty()) {
             if (!ssn.matches(RegexPattern.OLD_NIC_PATTERN) && !ssn.matches(RegexPattern.NEW_NIC_PATTERN)) {
-                logger.error("Invalid SSN(NIC) format.");
-                throw new ValidationErrorException("Invalid SSN(NIC) format.");
+                logger.error("Invalid SSN(NIC) format.Requested NIC : {}",ssn);
+                throw new ValidationErrorException("Invalid SSN(NIC) format.Requested NIC : "+ ssn);
             }
         }
     }
@@ -269,12 +266,7 @@ public class CommonValidationServiceImpl implements CommonValidationService {
 
     @Override
     public void validateNationality(String nationality, boolean required) {
-        if (required) {
-            if (nationality.trim().isEmpty() || nationality.trim() == null) {
-                logger.error("Nationality value is null. But its required.");
-                throw new ValidationErrorException("Nationality value is null. But its required.");
-            }
-        }
+        validateStringNullable(nationality, required, "Nationality");
         if (nationality != null) {
             enumValidationService.validateCountryCode(nationality);
         }
@@ -290,6 +282,9 @@ public class CommonValidationServiceImpl implements CommonValidationService {
 
     @Override
     public void validateTPersonIdentification(TPersonIdentification identification, boolean required) {
+        if (identification == null) {
+            return;
+        }
         if (required && identification.getType().toString() == null) {
             logger.error("Identification type is null. but its required.");
             throw new ValidationErrorException("Identification type is null. but its required.");
@@ -362,7 +357,9 @@ public class CommonValidationServiceImpl implements CommonValidationService {
     @Override
     public void validateResidence(String residence, boolean required) {
         validateStringNullable(residence, required, "Residence");
-        enumValidationService.validateCountryCode(residence);
+        if (residence != null) {
+            enumValidationService.validateCountryCode(residence);
+        }
     }
 
     @Override
@@ -377,20 +374,23 @@ public class CommonValidationServiceImpl implements CommonValidationService {
 
     @Override
     public void validatePassport(Passport passport, boolean required) {
-        validatePassportNumber(passport.getPassportNumber(), required);
-        validatePassportCountry(passport.getPassportCountry(), required);
+        if (passport != null) {
+            validatePassportNumber(passport.getPassportNumber(), required);
+            validatePassportCountry(passport.getPassportCountry(), required);
+        }
     }
 
     @Override
     public void validateMothersName(String mothersName, boolean required) {
         validateStringCharacterLimits(mothersName, required, 100, "Mothers name");
-
     }
 
     @Override
     public void validateLastName(String lastName, boolean required) {
         validateStringCharacterLimits(lastName, required, 100, "Last name");
-        validateUpperCases(lastName, required, "Last name");
+        if (lastName != null) {
+            validateUpperCases(lastName, required, "Last name");
+        }
     }
 
     private void validateUpperCases(String paragraph, boolean required, String name) {
@@ -424,7 +424,9 @@ public class CommonValidationServiceImpl implements CommonValidationService {
     @Override
     public void validateFundsCode(String fundsCode, boolean required) {
         validateStringNullable(fundsCode, required, "Funds code");
-        enumValidationService.validateFundsType(fundsCode);
+        if (fundsCode != null) {
+            enumValidationService.validateFundsType(fundsCode);
+        }
     }
 
     @Override
@@ -438,7 +440,9 @@ public class CommonValidationServiceImpl implements CommonValidationService {
     @Override
     public void validateCountry(String country, boolean required) {
         validateStringNullable(country, required, "Country");
-        enumValidationService.validateCountryCode(country);
+        if (country != null) {
+            enumValidationService.validateCountryCode(country);
+        }
     }
 
     @Override
@@ -447,11 +451,15 @@ public class CommonValidationServiceImpl implements CommonValidationService {
             logger.error("Foreign currency cannot be null. but its null");
             throw new ValidationErrorException("Foreign currency cannot be null. but its null");
         }
-        enumValidationService.validateCurrencyCode(foreignCurrency.getForeignCurrencyCode().toString());
-        validateStringNullable(foreignCurrency.getForeignAmount().toString(), true, "Foreign currency amount");
-        if (!foreignCurrency.getForeignExchangeRate().toString().equals("1")) {
-            logger.error("Foreign exchange rate must be 1.");
-            throw new ValidationErrorException("Foreign exchange rate must be 1.");
+        if (foreignCurrency != null) {
+            enumValidationService.validateCurrencyCode(foreignCurrency.getForeignCurrencyCode().toString());
+            validateStringNullable(foreignCurrency.getForeignAmount().toString(), true, "Foreign currency amount");
+        }
+        if (foreignCurrency != null) {
+            if (!foreignCurrency.getForeignExchangeRate().toString().equals("1")) {
+                logger.error("Foreign exchange rate must be 1.");
+                throw new ValidationErrorException("Foreign exchange rate must be 1.");
+            }
         }
     }
 

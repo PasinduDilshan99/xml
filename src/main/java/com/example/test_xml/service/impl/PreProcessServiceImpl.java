@@ -2,13 +2,12 @@ package com.example.test_xml.service.impl;
 
 import com.example.test_xml.model.enums.CountryCodes;
 import com.example.test_xml.model.response.ExtractNameResponse;
-import com.example.test_xml.service.CommonMethodService;
+import com.example.test_xml.service.PreProcessService;
 import org.springframework.stereotype.Service;
-
 import java.util.Base64;
 
 @Service
-public class CommonMethodServiceImpl implements CommonMethodService {
+public class PreProcessServiceImpl implements PreProcessService {
 
     @Override
     public ExtractNameResponse extractFirstNameAndLastName(String name) {
@@ -20,11 +19,10 @@ public class CommonMethodServiceImpl implements CommonMethodService {
         if (lastSpaceIndex == -1) {
             return new ExtractNameResponse(name, null);
         }
-        String firstName = trimmedInput.substring(0, lastSpaceIndex);
-        String lastName = trimmedInput.substring(lastSpaceIndex + 1);
+        String lastName = trimmedInput.substring(0, lastSpaceIndex);
+        String firstName = trimmedInput.substring(lastSpaceIndex + 1);
         return new ExtractNameResponse(firstName, lastName);
     }
-
 
     @Override
     public String decodeBase64(String encodeValue) {

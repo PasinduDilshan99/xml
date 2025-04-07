@@ -4,7 +4,7 @@ import com.example.test_xml.model.response.CustomerDetails;
 import com.example.test_xml.model.response.GetUserTypesResponse;
 import com.example.test_xml.model.response.MerchantDetails;
 import com.example.test_xml.model.response.ReSellerDetails;
-import com.example.test_xml.repository.CommonRepository;
+import com.example.test_xml.repository.TransactionRepository;
 import com.example.test_xml.util.Queries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,27 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class CommonRepositoryImpl implements CommonRepository {
+public class TransactionRepositoryImpl implements TransactionRepository {
 
-    private final Logger logger = LoggerFactory.getLogger(CommonRepositoryImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(TransactionRepositoryImpl.class);
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public CommonRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public TransactionRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<GetUserTypesResponse> getUserTypes() {
         logger.info("Start executing getUserTypes");
-        String SQL_QUERY = Queries.GET_USER_TYPES; // Ensure Queries is correctly defined
+        String SQL_QUERY = Queries.GET_USER_TYPES;
 
         try {
             return jdbcTemplate.query(SQL_QUERY, (rs, rowNum) -> new GetUserTypesResponse(
@@ -58,6 +56,10 @@ public class CommonRepositoryImpl implements CommonRepository {
 
     public List<MerchantDetails> getMerchantDetails(List<Integer> accountIds) {
         logger.info("Start executing getMerchantDetails");
+
+        if (accountIds == null || accountIds.isEmpty()) {
+            return Collections.emptyList();
+        }
 
 
         String inSql = accountIds.stream()
@@ -125,10 +127,16 @@ public class CommonRepositoryImpl implements CommonRepository {
     public List<CustomerDetails> getCustomerDetails(List<Integer> accountIds) {
         logger.info("Start executing get customer details");
 
+        if (accountIds == null || accountIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
 
         String inSql = accountIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
+        logger.info("accountId" + accountIds);
+        logger.info("insql" + inSql);
 
         String query = String.format(Queries.GET_CUSTOMER_DETAILS, inSql);
 
@@ -169,15 +177,19 @@ public class CommonRepositoryImpl implements CommonRepository {
     public List<ReSellerDetails> getReSellerDetails(List<Integer> accountIds) {
         logger.info("Start executing get reseller details");
 
+        if (accountIds == null || accountIds.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         String inSql = accountIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
-
+        logger.info("accountId" + accountIds);
+        logger.info("insql" + inSql);
         String query = String.format(Queries.GET_RESELLER_DETAILS, inSql);
 
         try {
-            return jdbcTemplate.query(query, (rs, rowNum) -> {
+            return jdbcTemplate.query(query, accountIds.toArray(), (rs, rowNum) -> {
                 ReSellerDetails reSellerDetails = new ReSellerDetails();
                 reSellerDetails.setId(rs.getInt("id"));
                 reSellerDetails.setFirstName(rs.getString("first_name"));
@@ -230,7 +242,6 @@ public class CommonRepositoryImpl implements CommonRepository {
             return Collections.emptyList();
         }
     }
-
 
 
 }

@@ -1,11 +1,11 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.exception.ValidationErrorException;
 import com.example.test_xml.model.xmlDto.pae.TEntityMyClient;
-import com.example.test_xml.service.validations.CommonValidationService;
-import com.example.test_xml.service.validations.DirectorIdValidationService;
-import com.example.test_xml.service.validations.EnumValidationService;
-import com.example.test_xml.service.validations.TEntityMyClientValidationService;
+import com.example.test_xml.validationServices.CommonValidationService;
+import com.example.test_xml.validationServices.DirectorIdValidationService;
+import com.example.test_xml.validationServices.EnumValidationService;
+import com.example.test_xml.validationServices.TEntityMyClientValidationService;
 import com.example.test_xml.util.RegexPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

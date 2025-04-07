@@ -7,7 +7,7 @@ import com.example.test_xml.model.response.ReSellerDetails;
 
 import java.util.List;
 
-public interface CommonRepository {
+public interface TransactionRepository {
     List<GetUserTypesResponse> getUserTypes();
     List<MerchantDetails> getMerchantDetails(List<Integer> accountIds);
 

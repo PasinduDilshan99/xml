@@ -1,12 +1,12 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.exception.ValidationErrorException;
 import com.example.test_xml.model.enums.AccountTypes;
 import com.example.test_xml.model.xmlDto.pae.TEntityMyClient;
 import com.example.test_xml.model.xmlDto.pae.TPersonMyClient;
 import com.example.test_xml.model.xmlDto.to.ToAccount;
-import com.example.test_xml.service.validations.*;
 import com.example.test_xml.util.RegexPattern;
+import com.example.test_xml.validationServices.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

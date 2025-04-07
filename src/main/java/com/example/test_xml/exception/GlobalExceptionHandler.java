@@ -16,6 +16,18 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {ConvertErrorException.class})
+    public ResponseEntity<ErrorResponse> handleConvertErrorException(ConvertErrorException e) {
+        logger.error("{} Convert Error Exception : {} {}", Constant.ERROR_DOTS_START, e, Constant.ERROR_DOTS_END);
+        ErrorResponse errorResponse = new ErrorResponse(
+                ResponseCodesAndMessages.CONVERT_ERROR_STATUS,
+                ResponseCodesAndMessages.CONVERT_ERROR_CODE,
+                e.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = {InternalServerErrorException.class})
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException e) {
@@ -35,6 +47,18 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 ResponseCodesAndMessages.INVALID_ARGUMENT_STATUS,
                 ResponseCodesAndMessages.INVALID_ARGUMENT_CODE,
+                e.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidDataErrorException.class})
+    public ResponseEntity<ErrorResponse> handleInvalidDataErrorException(InvalidDataErrorException e) {
+        logger.error("{} Invalid Data Error Exception : {} {}", Constant.ERROR_DOTS_START, e, Constant.ERROR_DOTS_END);
+        ErrorResponse errorResponse = new ErrorResponse(
+                ResponseCodesAndMessages.INVALID_DATA_STATUS,
+                ResponseCodesAndMessages.INVALID_DATA_CODE,
                 e.getMessage()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

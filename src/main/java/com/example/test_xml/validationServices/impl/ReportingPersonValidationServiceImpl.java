@@ -1,9 +1,9 @@
-package com.example.test_xml.service.validations.impl;
+package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.model.xmlDto.TPersonRegistrationInReport;
-import com.example.test_xml.service.validations.CommonValidationService;
-import com.example.test_xml.service.validations.EnumValidationService;
-import com.example.test_xml.service.validations.ReportingPersonValidationService;
+import com.example.test_xml.validationServices.CommonValidationService;
+import com.example.test_xml.validationServices.EnumValidationService;
+import com.example.test_xml.validationServices.ReportingPersonValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

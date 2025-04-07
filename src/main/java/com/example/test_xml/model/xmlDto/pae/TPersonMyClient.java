@@ -16,7 +16,7 @@ import java.util.List;
 public class TPersonMyClient {
 
     @JacksonXmlProperty(localName = "gender")
-    private GenderTypes gender;
+    private String gender;
 
     @JacksonXmlProperty(localName = "title")
     private String title;
