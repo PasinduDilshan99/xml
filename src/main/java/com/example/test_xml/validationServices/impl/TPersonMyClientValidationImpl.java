@@ -40,7 +40,8 @@ public class TPersonMyClientValidationImpl implements TPersonMyClientValidation 
         commonValidationService.validateFirstName(tPersonMyClient.getFirstName(), true);
         commonValidationService.validateMiddleName(tPersonMyClient.getMiddleName(), false);
         commonValidationService.validatePrefix(tPersonMyClient.getPrefix(), false);
-        commonValidationService.validateLastName(tPersonMyClient.getLastName(), true);
+        // last name validation requird - true
+//        commonValidationService.validateLastName(tPersonMyClient.getLastName(), true);
         commonValidationService.validateBirthDate(tPersonMyClient.getBirthdate(), true);
         commonValidationService.validateBirthPlace(tPersonMyClient.getBirthPlace(), false);
         commonValidationService.validateMothersName(tPersonMyClient.getMothersName(), false);
@@ -64,7 +65,8 @@ public class TPersonMyClientValidationImpl implements TPersonMyClientValidation 
         commonValidationService.validatePhone(tPersonMyClient.getPhone(), false);
         commonValidationService.validateAddress(tPersonMyClient.getAddress(), false);
         commonValidationService.validateEmail(tPersonMyClient.getEmail(), false);
-        commonValidationService.validateOccupation(tPersonMyClient.getOccupation(), true);
+        // change occupetion required -> its true
+        commonValidationService.validateOccupation(tPersonMyClient.getOccupation(), false);
         commonValidationService.validateEmployerName(tPersonMyClient.getEmployerName(), false);
         commonValidationService.validateAddress(tPersonMyClient.getEmployerAddressId(), false);
         commonValidationService.validatePhone(tPersonMyClient.getEmployerPhoneId(), false);

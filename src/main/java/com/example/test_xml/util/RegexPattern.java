@@ -11,5 +11,6 @@ public class RegexPattern {
     public static final String SWIFT_PATTERN = "^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$";
     public static final String LANKA_CLEAR_PATTERN = "^\\d{4,}$";
     public static final String LANKA_FIN_PATTERN = "^\\d{4,}$";
+    public static final String DATE_FORMAT_PATTERN = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}";
 
 }

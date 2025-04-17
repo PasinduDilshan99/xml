@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -20,7 +21,7 @@ public class CommonDetails {
     private String alias;
     private String title;
     private String idNumber;
-    private Date birthdate;
+    private Timestamp birthdate;
     private String mothersName;
     private String nationality1;
     private String city;
@@ -89,5 +90,4 @@ public class CommonDetails {
     private String utilityCompany;
     private String webAddress;
     private UserTypes userType;
-
 }

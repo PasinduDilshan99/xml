@@ -35,9 +35,6 @@ public class TAddress {
     @JacksonXmlProperty(localName = "State")
     private String state;
 
-    @JacksonXmlProperty(localName = "tph_contact_type")
-    private String tphContactType;
-
     @JacksonXmlProperty(localName = "comments")
     private String comments;
 }

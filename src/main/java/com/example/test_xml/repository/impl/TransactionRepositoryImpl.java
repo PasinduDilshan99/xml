@@ -61,10 +61,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             return Collections.emptyList();
         }
 
-
         String inSql = accountIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
+        logger.info("Merchant account ids : {}" , accountIds);
 
         String query = String.format(Queries.GET_MERCHANT_DETAILS, inSql);
 
@@ -81,7 +81,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 merchantDetails.setAlias(rs.getString("alias"));
                 merchantDetails.setTitle(rs.getString("title"));
                 merchantDetails.setIdNumber(rs.getString("id_number"));
-                merchantDetails.setBirthdate(rs.getDate("birthdate"));
+                merchantDetails.setBirthdate(rs.getTimestamp("birthdate"));
                 merchantDetails.setMothersName(rs.getString("mothers_name"));
                 merchantDetails.setNationality1(rs.getString("nationality1"));
                 merchantDetails.setCity(rs.getString("city"));
@@ -135,8 +135,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         String inSql = accountIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
-        logger.info("accountId" + accountIds);
-        logger.info("insql" + inSql);
+        logger.info("Customer account ids : {}" , accountIds);
 
         String query = String.format(Queries.GET_CUSTOMER_DETAILS, inSql);
 
@@ -152,7 +151,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 customerDetails.setAlias(rs.getString("alias"));
                 customerDetails.setTitle(rs.getString("title"));
                 customerDetails.setIdNumber(rs.getString("id_number"));
-                customerDetails.setBirthdate(rs.getDate("birthdate"));
+                customerDetails.setBirthdate(rs.getTimestamp("birthdate"));
                 customerDetails.setMothersName(rs.getString("mothers_name"));
                 customerDetails.setNationality1(rs.getString("nationality1"));
                 customerDetails.setCity(rs.getString("city"));
@@ -184,8 +183,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         String inSql = accountIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
-        logger.info("accountId" + accountIds);
-        logger.info("insql" + inSql);
+        logger.info("Reseller account ids : {}" , accountIds);
         String query = String.format(Queries.GET_RESELLER_DETAILS, inSql);
 
         try {
@@ -200,7 +198,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 reSellerDetails.setAlias(rs.getString("alias"));
                 reSellerDetails.setTitle(rs.getString("title"));
                 reSellerDetails.setIdNumber(rs.getString("id_number"));
-                reSellerDetails.setBirthdate(rs.getDate("birthdate"));
+                reSellerDetails.setBirthdate(rs.getTimestamp("birthdate"));
                 reSellerDetails.setMothersName(rs.getString("mothers_name"));
                 reSellerDetails.setNationality1(rs.getString("nationality1"));
                 reSellerDetails.setCity(rs.getString("city"));

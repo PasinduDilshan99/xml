@@ -22,7 +22,8 @@ public class DirectorIdValidationServiceImpl implements DirectorIdValidationServ
         commonValidationService.validateFirstName(directorId.getFirstName(), true);
         commonValidationService.validateMiddleName(directorId.getMiddleName(), false);
         commonValidationService.validatePrefix(directorId.getPrefix(), false);
-        commonValidationService.validateLastName(directorId.getLastName(), true);
+        // required - true
+//        commonValidationService.validateLastName(directorId.getLastName(), true);
         commonValidationService.validateBirthDate(directorId.getBirthdate(), false);
         commonValidationService.validateBirthPlace(directorId.getBirthPlace(), false);
         commonValidationService.validateMothersName(directorId.getMothersName(), false);

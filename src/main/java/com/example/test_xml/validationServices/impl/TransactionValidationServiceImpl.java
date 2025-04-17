@@ -1,7 +1,10 @@
 package com.example.test_xml.validationServices.impl;
 
 import com.example.test_xml.exception.InvalidDataErrorException;
+import com.example.test_xml.exception.ValidationErrorException;
 import com.example.test_xml.model.xmlDto.Transaction;
+import com.example.test_xml.model.xmlDto.from.TFromMyClient;
+import com.example.test_xml.model.xmlDto.to.TToMyClient;
 import com.example.test_xml.validationServices.CommonValidationService;
 import com.example.test_xml.validationServices.TransactionValidationService;
 import org.slf4j.Logger;
@@ -31,21 +34,37 @@ public class TransactionValidationServiceImpl implements TransactionValidationSe
 
     @Override
     public void validateTransaction(Transaction transaction) {
-        validateTransactionNumber(transaction.getTransactionNumber(), true);
+        validateTransactionNumber(transaction.getTransactionNumber(), true); //
         validateInternalRefNumber(transaction.getInternalRefNumber(), false);
-        validateTransactionLocation(transaction.getTransactionLocation(), transaction.getTransmodeCode().toString(), false);
-        validateTransactionDescription(transaction.getTransactionDescription(), true);
-        validateDateTransaction(transaction.getDateTransaction(), true);
+        validateTransactionLocation(transaction.getTransactionLocation(), transaction.getTransmodeCode().toString(), false); // <-- if transmode code is branch
+        validateTransactionDescription(transaction.getTransactionDescription(), false); //
+        validateDateTransaction(transaction.getDateTransaction(), true); //
         validateTeller(transaction.getTeller(), false);
         validateAuthorized(transaction.getAuthorized(), false);
         validateLateDeposit(transaction.getLateDeposit(), false);
         validateDatePosting(transaction.getDatePosting(), false);
         validateValueDate(transaction.getValueDate(), false);
-        validateTransmodeCode(transaction.getTransmodeCode().toString(), true);
-        validateTransmodeComment(transaction.getTransmodeComment(), transaction.getTransmodeCode().toString(), false);
-        validateAmountLocal(transaction.getAmountLocal(), true);
+        validateTransmodeCode(transaction.getTransmodeCode().toString(), true); //
+        validateTransmodeComment(transaction.getTransmodeComment(), transaction.getTransmodeCode().toString(), false); // <-- if transmode code is other
+        validateAmountLocal(transaction.getAmountLocal(), true); //
+        validateFrom(transaction.getTFromMyClient(),true);
+        validateTo(transaction.getTToMyClient(),true);
         validateGoodServices(transaction.getGoodsServices(), false);
         commonValidationService.validateComments(transaction.getComments(), false);
+    }
+
+    private void validateFrom(TFromMyClient tFromMyClient, boolean required) {
+        if (required && tFromMyClient == null){
+            logger.error("From party is empty.");
+            throw new ValidationErrorException("From party is empty.");
+        }
+    }
+
+    private void validateTo(TToMyClient tToMyClient, boolean required) {
+        if (required && tToMyClient == null){
+            logger.error("To party is empty.");
+            throw new ValidationErrorException("To party is empty.");
+        }
     }
 
     private void validateAmountLocal(BigDecimal amountLocal, boolean required) {

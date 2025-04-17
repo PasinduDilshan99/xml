@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -20,7 +21,7 @@ public class ReSellerDetails extends CommonDetailsResponse{
     private String alias;
     private String title;
     private String idNumber;
-    private Date birthdate;
+    private Timestamp birthdate;
     private String mothersName;
     private String nationality1;
     private String city;

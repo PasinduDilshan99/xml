@@ -10,6 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 @Service
 public class CommonValidationServiceImpl implements CommonValidationService {
 
@@ -65,8 +69,8 @@ public class CommonValidationServiceImpl implements CommonValidationService {
         }
         if (ssn != null && !ssn.isEmpty()) {
             if (!ssn.matches(RegexPattern.OLD_NIC_PATTERN) && !ssn.matches(RegexPattern.NEW_NIC_PATTERN)) {
-                logger.error("Invalid SSN(NIC) format.Requested NIC : {}",ssn);
-                throw new ValidationErrorException("Invalid SSN(NIC) format.Requested NIC : "+ ssn);
+                logger.error("Invalid SSN(NIC) format.Requested NIC : {}", ssn);
+                throw new ValidationErrorException("Invalid SSN(NIC) format.Requested NIC : " + ssn);
             }
         }
     }
@@ -167,10 +171,10 @@ public class CommonValidationServiceImpl implements CommonValidationService {
                 logger.error("Invalid address format.");
                 throw new ValidationErrorException("Invalid address format.");
             }
-            if (address.getCity() != null) {
-                logger.error("Invalid city format.");
-                throw new ValidationErrorException("Invalid city format.");
-            }
+//            if (address.getCity() != null) {
+//                logger.error("Invalid city format.");
+//                throw new ValidationErrorException("Invalid city format.");
+//            }
             if (address.getZip() != null && address.getZip().length() > 10) {
                 logger.error("Zip code must be at most 10 characters.");
                 throw new ValidationErrorException("Zip code must be at most 10 characters.");
@@ -197,12 +201,12 @@ public class CommonValidationServiceImpl implements CommonValidationService {
             throw new ValidationErrorException("Email is required but missing.");
         }
 
-        if (email != null && !email.isEmpty()) {
-            if (!email.matches(RegexPattern.EMAIL_ADDRESS_PATTERN)) {
-                logger.error("Invalid email format.");
-                throw new ValidationErrorException("Invalid email format.");
-            }
-        }
+//        if (email != null && !email.isEmpty()) {
+//            if (!email.matches(RegexPattern.EMAIL_ADDRESS_PATTERN)) {
+//                logger.error("Invalid email format. {}", email);
+//                throw new ValidationErrorException("Invalid email format." + email);
+//            }
+//        }
     }
 
 
@@ -241,10 +245,10 @@ public class CommonValidationServiceImpl implements CommonValidationService {
                 enumValidationService.validateCommunicationType(phone.getTphCommunicationType().toString());
             }
 
-            if (!phone.getTphNumber().matches(RegexPattern.MOBILE_NUMBER_PATTERN)) {
-                logger.error("Phone number must contain only digits.");
-                throw new IllegalArgumentException("Phone number must contain only digits.");
-            }
+//            if (!phone.getTphNumber().matches(RegexPattern.MOBILE_NUMBER_PATTERN)) {
+//                logger.error("Phone number must contain only digits.");
+//                throw new IllegalArgumentException("Phone number must contain only digits.");
+//            }
 
             if (phone.getTphNumber().length() == 10 && !phone.getTphNumber().startsWith("0")) {
                 logger.error("Local numbers must start with '0' and have exactly 10 digits.");
@@ -462,5 +466,65 @@ public class CommonValidationServiceImpl implements CommonValidationService {
             }
         }
     }
+
+    @Override
+    public void valdiateInteger(Integer number, boolean required) {
+        if (required && number == null) {
+            throw new ValidationErrorException("number is required but was null");
+        }
+
+        if (number != null && number < 0) {
+            throw new ValidationErrorException("number must be a non-negative integer");
+        }
+
+    }
+
+    @Override
+    public void validateEnumNullable(String enumValue, String name, boolean required) {
+        if (required && enumValue == null) {
+            logger.error("{} is null.but its required.", name);
+            throw new ValidationErrorException(name + " is null.but its required.");
+        }
+    }
+
+
+    private void validateDateFormat(String date, boolean required, String name) {
+        if (date == null || date.trim().isEmpty()) {
+            if (required) {
+                logger.error("{} date is required.", name);
+                throw new ValidationErrorException(name + " date is required.");
+            } else {
+                return;
+            }
+        }
+
+        if (!date.matches(RegexPattern.DATE_FORMAT_PATTERN)) {
+            logger.error("{} date must match the format yyyy-MM-dd'T'HH:mm:ss", date);
+            throw new IllegalArgumentException(name + " date must match the format yyyy-MM-dd'T'HH:mm:ss");
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            LocalDateTime.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid " + name + " date format. Expected format: yyyy-MM-dd'T'HH:mm:ss");
+        }
+    }
+
+    private void validateDateIsInPast(String date, String name) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            LocalDateTime parsedDate = LocalDateTime.parse(date, formatter);
+
+            LocalDateTime now = LocalDateTime.now();
+            if (parsedDate.isAfter(now)) {
+                throw new ValidationErrorException(name + " date cannot be in the future.");
+            }
+
+        } catch (DateTimeParseException e) {
+            throw new ValidationErrorException("Invalid " + name + " date format. Expected format: yyyy-MM-dd'T'HH:mm:ss");
+        }
+    }
+
 
 }

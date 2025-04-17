@@ -73,4 +73,8 @@ public interface CommonValidationService {
     void validateCountry(String country, boolean required);
 
     void validateForeignCurrency(TForeignCurrency foreignCurrency, boolean required);
+
+    void valdiateInteger(Integer number, boolean required);
+
+    void validateEnumNullable(String enumValue, String name, boolean required);
 }

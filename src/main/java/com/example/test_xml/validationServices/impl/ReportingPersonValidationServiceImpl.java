@@ -28,7 +28,8 @@ public class ReportingPersonValidationServiceImpl implements ReportingPersonVali
         commonValidationService.validateFirstName(reportingPerson.getFirstName(), true);
         commonValidationService.validateMiddleName(reportingPerson.getMiddleName(), false);
         commonValidationService.validatePrefix(reportingPerson.getPrefix(), false);
-        commonValidationService.validateLastName(reportingPerson.getLastName(), true);
+        // required -true
+//        commonValidationService.validateLastName(reportingPerson.getLastName(), true);
         commonValidationService.validateBirthDate(reportingPerson.getBirthdate(), false);
         commonValidationService.validateBirthPlace(reportingPerson.getBirthPlace(), false);
         commonValidationService.validateMothersName(reportingPerson.getMothersName(), false);

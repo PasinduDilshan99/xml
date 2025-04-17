@@ -32,20 +32,20 @@ public class TEntityMyClientValidationServiceImpl implements TEntityMyClientVali
 
     @Override
     public void validateTEntityMyClient(TEntityMyClient tEntityMyClient) {
-        validateName(tEntityMyClient.getName(), true);
+        validateName(tEntityMyClient.getName(), true); //
         validateCommercialName(tEntityMyClient.getName(), tEntityMyClient.getCommercialName(), false);
-        validateIncorporationLegalForm(tEntityMyClient.getIncorporationLegalForm(), true);
+//        validateIncorporationLegalForm(tEntityMyClient.getIncorporationLegalForm(), true); //
         validateIncorporationNumber(tEntityMyClient.getIncorporationNumber(), false);
-        validateBusiness(tEntityMyClient.getBusiness(), true);
+        validateBusiness(tEntityMyClient.getBusiness(), true); //
         commonValidationService.validatePhone(tEntityMyClient.getPhone(), false);
-        commonValidationService.validateAddress(tEntityMyClient.getAddress(), true);
+        commonValidationService.validateAddress(tEntityMyClient.getAddress(), true); //
         commonValidationService.validateEmail(tEntityMyClient.getEmail(), false);
         validateUrl(tEntityMyClient.getUrl(), false);
         validateIncorporationState(tEntityMyClient.getIncorporationState(), false);
-        validateIncorporationCountryCode(tEntityMyClient.getIncorporationCountryCode(), true);
-        directorIdValidationService.validateDirectorId(tEntityMyClient.getDirectorId(), true);
+        validateIncorporationCountryCode(tEntityMyClient.getIncorporationCountryCode(), true); //
+//        directorIdValidationService.validateDirectorId(tEntityMyClient.getDirectorId(), true); //
         validateIncorporationDate(tEntityMyClient.getIncorporationDate(), false);
-        validateBusinessClosed(tEntityMyClient.getBusinessClosed(), false);
+//        validateBusinessClosed(tEntityMyClient.getBusinessClosed(), false);
         validateDateBusinessClosed(tEntityMyClient.getDateBusinessClosed(), false);
         commonValidationService.validateTaxNumber(tEntityMyClient.getTaxNumber(), false);
         commonValidationService.validateTaxRegNumber(tEntityMyClient.getTaxRegNumber(), false);
