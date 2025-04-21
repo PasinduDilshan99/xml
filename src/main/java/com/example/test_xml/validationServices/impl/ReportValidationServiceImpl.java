@@ -11,6 +11,7 @@ import com.example.test_xml.model.xmlDto.Transaction;
 import com.example.test_xml.validationServices.CommonValidationService;
 import com.example.test_xml.validationServices.EnumValidationService;
 import com.example.test_xml.validationServices.ReportValidationService;
+import com.example.test_xml.validationServices.TPersonRegistrationValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,15 @@ public class ReportValidationServiceImpl implements ReportValidationService {
 
     private final CommonValidationService commonValidationService;
     private final EnumValidationService enumValidationService;
+    private final TPersonRegistrationValidationService tPersonRegistrationValidationService;
 
     @Autowired
-    public ReportValidationServiceImpl(CommonValidationService commonValidationService, EnumValidationService enumValidationService) {
+    public ReportValidationServiceImpl(CommonValidationService commonValidationService,
+                                       EnumValidationService enumValidationService,
+                                       TPersonRegistrationValidationService tPersonRegistrationValidationService) {
         this.commonValidationService = commonValidationService;
         this.enumValidationService = enumValidationService;
+        this.tPersonRegistrationValidationService = tPersonRegistrationValidationService;
     }
 
     @Override
@@ -90,25 +95,54 @@ public class ReportValidationServiceImpl implements ReportValidationService {
     }
 
     private void validateSubmissionDate(String submissionDate, boolean required) {
-
+        commonValidationService.validateDateFormat(submissionDate, required, "Submission date");
+        commonValidationService.validateDateIsInPast(submissionDate, "Submission date");
     }
 
     private void validateCurrencyCodeLocal(Currencies currencyCodeLocal, boolean required) {
+        commonValidationService.validateEnumNullable(currencyCodeLocal.toString(), "Currency Code", required);
+        enumValidationService.validateCurrencyCode(currencyCodeLocal.toString());
+
+        // validate currency code must be LK
+        if (!currencyCodeLocal.equals(Currencies.LKR)) {
+            logger.error("Currency code is {}.but its need to be LKR.", currencyCodeLocal);
+            throw new ValidationErrorException("Currency code is " + currencyCodeLocal + " .but its need to be LKR.");
+        }
     }
 
     private void validateReportingPerson(TPersonRegistrationInReport reportingPerson, boolean required) {
+        if (required && reportingPerson == null) {
+            logger.error("Reporting person is null. but its required.");
+            throw new ValidationErrorException("Reporting person is null. but its required.");
+        }
+        if (reportingPerson != null) {
+            tPersonRegistrationValidationService.validateTPersonRegistration(reportingPerson);
+        }
     }
 
     private void validateReason(String reason, boolean required) {
+        commonValidationService.validateStringCharacterLimits(reason, required, 4000, "Reason");
     }
 
     private void validateAction(String action, boolean required) {
+        commonValidationService.validateStringCharacterLimits(action, required, 4000, "Action");
     }
 
     private void validateTransactions(List<Transaction> transaction, boolean required) {
+        if (required && transaction.isEmpty()) {
+            logger.error("Transaction is null. but its required.");
+            throw new ValidationErrorException("Transaction is null. but its required.");
+        }
     }
 
     private void validateReportIndicator(ReportIndicator reportIndicator, boolean required) {
+        if (required && reportIndicator.getIndicator() == null) {
+            logger.error("Reporting indicator is null. but its required.");
+            throw new ValidationErrorException("Reporting indicator is null. but its required.");
+        }
+        if (reportIndicator != null) {
+            enumValidationService.validateReportIndicator(reportIndicator.getIndicator().toString());
+        }
     }
 
 }

@@ -55,7 +55,7 @@ public interface CommonValidationService {
     void validatePassport(Passport passport, boolean required);
 
     void validateMothersName(String mothersName, boolean required);
-    
+
     void validateLastName(String lastName, boolean required);
 
     void validatePrefix(String prefix, boolean required);
@@ -68,7 +68,7 @@ public interface CommonValidationService {
 
     void validateFundsCode(String fundsCode, boolean required);
 
-    void validateFundsComment(String fundsComment, String fundsCode,boolean required);
+    void validateFundsComment(String fundsComment, String fundsCode, boolean required);
 
     void validateCountry(String country, boolean required);
 
@@ -77,4 +77,8 @@ public interface CommonValidationService {
     void valdiateInteger(Integer number, boolean required);
 
     void validateEnumNullable(String enumValue, String name, boolean required);
+
+    void validateDateIsInPast(String date, String name);
+
+    void validateDateFormat(String date, boolean required, String name);
 }

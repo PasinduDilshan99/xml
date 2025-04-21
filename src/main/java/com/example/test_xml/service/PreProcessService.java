@@ -11,10 +11,13 @@ public interface PreProcessService {
 
     String convertNationality(String nationality1);
 
-    String createAddressUsingAddressLines(String addressLine1,String addressLine2,String addressLine3);
+    String createAddressUsingAddressLines(String addressLine1, String addressLine2, String addressLine3);
 
     String reduceFirstNameCharacters(String firstName);
 
     String mobileNumberStandardization(String mobileNumber);
+
     boolean mobileOrNot(String mobileNumber);
+
+    String prepareBusinessType(String businessType);
 }

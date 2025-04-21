@@ -1,7 +1,7 @@
 package com.example.test_xml.controller;
 
 import com.example.test_xml.model.response.*;
-import com.example.test_xml.service.PreProcessService;
+import com.example.test_xml.service.TestService;
 import com.example.test_xml.service.TransactionService;
 import com.example.test_xml.util.Constant;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,24 +18,15 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
-
-    @Autowired
-    private PreProcessService pePreProcessService;
+    private final TestService testService;
 
     private final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService,
+                                 TestService testService) {
         this.transactionService = transactionService;
-    }
-
-    @GetMapping("/test")
-    public String test(){
-        logger.info(Constant.DOTS + " Start the execute test controller. " + Constant.DOTS);
-        logger.info("-------------------------------------- Test --------------------------------------");
-        pePreProcessService.formatDateInCorrectFormat("2024-03-13 15:59:38.0");
-        logger.info(Constant.DOTS + " End execute test controller. " + Constant.DOTS);
-        return "test";
+        this.testService = testService;
     }
 
     @GetMapping("/get-user-types")
@@ -49,7 +40,7 @@ public class TransactionController {
     @GetMapping("/get-merchant-details")
     public List<MerchantDetails> getMerchantDetails(){
         logger.info(Constant.DOTS + " Start the execute get merchant details. " + Constant.DOTS);
-        List<MerchantDetails> merchantDetails = transactionService.getMerchantDetails();
+        List<MerchantDetails> merchantDetails = testService.getMerchantDetails();
         logger.info(Constant.DOTS + " End execute get merchant details. " + Constant.DOTS);
         return merchantDetails;
     }
@@ -57,7 +48,7 @@ public class TransactionController {
     @GetMapping("/get-customer-details")
     public List<CustomerDetails> getCustomerDetails(){
         logger.info(Constant.DOTS + " Start the execute get customer details. " + Constant.DOTS);
-        List<CustomerDetails> customerDetails = transactionService.getCustomerDetails();
+        List<CustomerDetails> customerDetails = testService.getCustomerDetails();
         logger.info(Constant.DOTS + " End execute get customer details. " + Constant.DOTS);
         return customerDetails;
     }
@@ -65,7 +56,7 @@ public class TransactionController {
     @GetMapping("/get-reseller-details")
     public List<ReSellerDetails> getReSellerDetails(){
         logger.info(Constant.DOTS + " Start the execute get re seller details. " + Constant.DOTS);
-        List<ReSellerDetails> reSellerDetails = transactionService.getReSellerDetails();
+        List<ReSellerDetails> reSellerDetails = testService.getReSellerDetails();
         logger.info(Constant.DOTS + " End execute get re seller details. " + Constant.DOTS);
         return reSellerDetails;
     }

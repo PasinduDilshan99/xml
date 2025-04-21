@@ -26,6 +26,7 @@ public class ReSellerDetails extends CommonDetailsResponse{
     private String nationality1;
     private String city;
     private String state;
+    private String businessType;
     private String phonesPrimary;
     private String phonesSecondary;
     private String email;

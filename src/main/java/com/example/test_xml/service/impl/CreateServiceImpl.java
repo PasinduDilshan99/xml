@@ -1,78 +1,53 @@
 package com.example.test_xml.service.impl;
 
 import com.example.test_xml.model.enums.*;
-import com.example.test_xml.model.enums.db.UserTypes;
 import com.example.test_xml.model.otherEnums.BusinessCategory;
 import com.example.test_xml.model.otherEnums.OccupationCategory;
-import com.example.test_xml.model.response.*;
+import com.example.test_xml.model.response.CommonDetails;
+import com.example.test_xml.model.response.ExtractNameResponse;
+import com.example.test_xml.model.response.TransactionResponse;
 import com.example.test_xml.model.xmlDto.DirectorId;
 import com.example.test_xml.model.xmlDto.TAddress;
-import com.example.test_xml.model.xmlDto.TPhone;
+import com.example.test_xml.model.xmlDto.Transaction;
 import com.example.test_xml.model.xmlDto.from.FromEntity;
 import com.example.test_xml.model.xmlDto.from.FromPerson;
 import com.example.test_xml.model.xmlDto.from.TFromMyClient;
-import com.example.test_xml.model.xmlDto.pae.TEntityMyClient;
-import com.example.test_xml.model.xmlDto.pae.TPersonMyClient;
 import com.example.test_xml.model.xmlDto.to.TToMyClient;
 import com.example.test_xml.model.xmlDto.to.ToAccount;
+import com.example.test_xml.service.CreateService;
+import com.example.test_xml.service.MyClientService;
 import com.example.test_xml.service.PreProcessService;
-import com.example.test_xml.service.ConvertService;
-import com.example.test_xml.validationServices.TEntityMyClientValidationService;
-import com.example.test_xml.validationServices.TPersonMyClientValidation;
+import com.example.test_xml.validationServices.FromAndToValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConvertServiceImpl implements ConvertService {
-
-    private final Logger logger = LoggerFactory.getLogger(ConvertServiceImpl.class);
+public class CreateServiceImpl implements CreateService {
 
     private final PreProcessService preProcessService;
-    private final TPersonMyClientValidation tPersonMyClientValidation;
-    private final TEntityMyClientValidationService tEntityMyClientValidationService;
+    private final MyClientService myClientService;
+    private final FromAndToValidationService fromAndToValidationService;
 
     @Autowired
-    public ConvertServiceImpl(PreProcessService preProcessService,
-                              TPersonMyClientValidation tPersonMyClientValidation,
-                              TEntityMyClientValidationService tEntityMyClientValidationService) {
+    public CreateServiceImpl(PreProcessService preProcessService,
+                             @Lazy MyClientService myClientService,
+                             FromAndToValidationService fromAndToValidationService) {
         this.preProcessService = preProcessService;
-        this.tPersonMyClientValidation = tPersonMyClientValidation;
-        this.tEntityMyClientValidationService = tEntityMyClientValidationService;
+        this.myClientService = myClientService;
+        this.fromAndToValidationService = fromAndToValidationService;
     }
 
+    private final Logger logger = LoggerFactory.getLogger(CreateServiceImpl.class);
 
     @Override
-    public TFromMyClient convertDataToFromMyClient(CommonDetails from) {
-        TFromMyClient tFromMyClient = new TFromMyClient();
-        tFromMyClient.setFromFundsCode(FundsTypes.MOBL); //
-        tFromMyClient.setFromFundsComment(null);
-//        if (tFromMyClient.getFromFundsCode() != null && tFromMyClient.getFromFundsCode().equals(FundsTypes.OTH)) { // <-- if fund_code is other
-//            tFromMyClient.setFromFundsComment("comment"); // chane this
-//        } else {
-//            tFromMyClient.setFromFundsComment(null);
-//        }
-        tFromMyClient.setFromForeignCurrency(null);
-        tFromMyClient.setTConductor(null);
-        if (from.getUserType().equals(UserTypes.CUSTOMER)) {
-            // From person
-            tFromMyClient.setTPersonMyClient(createFromPersonForFrom(from));
-            tPersonMyClientValidation.validateTPersonMyClient(tFromMyClient.getTPersonMyClient());  // tPersonMyClient validation
-        } else if (from.getUserType().equals(UserTypes.MERCHANT) || from.getUserType().equals(UserTypes.RETAILER)) {
-            // From entity
-            tFromMyClient.setTEntityMyClient(createFromEntityForFrom(from));
-            tEntityMyClientValidationService.validateTEntityMyClient(tFromMyClient.getTEntityMyClient());  // tEntityMyClient validation
-        }
-        tFromMyClient.setFromCountry(CountryCodes.LK); //
-        return tFromMyClient;
-    }
-
-    private FromEntity createFromEntityForFrom(CommonDetails from) {
+    public FromEntity createTEntityMyClient(CommonDetails from) {
         FromEntity fromEntity = new FromEntity();
         fromEntity.setName(from.getFirstName()); //
         fromEntity.setCommercialName(null);
-        fromEntity.setIncorporationLegalForm(null); //
+        fromEntity.setIncorporationLegalForm(preProcessService.prepareBusinessType(from.getBusinessType())); //
         fromEntity.setIncorporationNumber(null);// optional --> fromEntity.setIncorporationNumber(from.getBusinessRegistrationNumber());
         fromEntity.setBusiness(BusinessCategory.SLSIC.toString()); //
         fromEntity.setPhone(null);
@@ -98,7 +73,8 @@ public class ConvertServiceImpl implements ConvertService {
         return fromEntity;
     }
 
-    private FromPerson createFromPersonForFrom(CommonDetails from) {
+    @Override
+    public FromPerson createTPersonMyClient(CommonDetails from) {
         FromPerson fromPerson = new FromPerson();
         fromPerson.setGender(null);
         fromPerson.setTitle(null);
@@ -175,20 +151,7 @@ public class ConvertServiceImpl implements ConvertService {
     }
 
     @Override
-    public TToMyClient convertDataTOTTOMyClient(CommonDetails to) {
-        TToMyClient tToMyClient = new TToMyClient();
-        tToMyClient.setToFundsCode(FundsTypes.MOBL);
-        tToMyClient.setToFundsComment(null); // --> required if to_funds_code is other
-        tToMyClient.setToForeignCurrency(null);
-        ToAccount toAccount = convertDataToToAccount(to);
-        tToMyClient.setToAccount(toAccount);
-        tToMyClient.setToCountry(CountryCodes.LK);
-        return tToMyClient;
-    }
-
-
-    @Override
-    public ToAccount convertDataToToAccount(CommonDetails to) {
+    public ToAccount createTAccountMyClient(CommonDetails to) {
         ToAccount toAccount = new ToAccount();
         toAccount.setInstitutionName("Mobitel (Pvt) Ltd"); //
         toAccount.setInstitutionCode(null);
@@ -201,8 +164,8 @@ public class ConvertServiceImpl implements ConvertService {
         toAccount.setIban(null);
         toAccount.setClientNumber(null);
         toAccount.setPersonalAccountType(AccountTypes.MOBW);
-        toAccount.setTEntity(createTEntityMyClientForTo(to));
-        //        if (to.getUserType().equals(UserTypes.CUSTOMER)) {
+        toAccount.setTEntity(createTEntityMyClient(to));
+//        if (to.getUserType().equals(UserTypes.CUSTOMER)) {
 //            toAccount.setSignatory(createTPersonClientForTo(to));
 //        } else if (to.getUserType().equals(UserTypes.MERCHANT) || to.getUserType().equals(UserTypes.RETAILER)) {
 //            toAccount.setTEntity(createTEntityMyClientForTo(to));
@@ -220,72 +183,8 @@ public class ConvertServiceImpl implements ConvertService {
         return toAccount;
     }
 
-    private TPersonMyClient createTPersonClientForTo(CommonDetails to) {
-        TPersonMyClient tPersonMyClient = new TPersonMyClient();
-        tPersonMyClient.setGender(null);
-        tPersonMyClient.setTitle(null);
-        tPersonMyClient.setFirstName(to.getFirstName()); //
-        tPersonMyClient.setMiddleName(null);
-        tPersonMyClient.setPrefix(null);
-        tPersonMyClient.setLastName(null); //
-        tPersonMyClient.setBirthdate(String.valueOf(to.getBirthdate())); //
-        tPersonMyClient.setBirthPlace(null);
-        tPersonMyClient.setMothersName(to.getMothersName());
-        tPersonMyClient.setAlias(null);
-        tPersonMyClient.setSsn(to.getIdNumber()); //
-        tPersonMyClient.setPassports(null);
-        tPersonMyClient.setIdNumber(null);
-        tPersonMyClient.setNationality1(to.getNationality1()); // used category
-        tPersonMyClient.setNationality2(null);
-        tPersonMyClient.setNationality3(null);
-        tPersonMyClient.setResidence(to.getResidenceCategory()); // used category
-        tPersonMyClient.setPhone(new TPhone(ContactTypes.PRVT, CommunicationTypes.MOPH, "94", to.getPhonesPrimary(), null, null));
-//        tPersonMyClient.setAddress(new TAddress(ContactTypes.UNKNOWN, to.getAddressLine1() + to.getAddressLine2() + to.getAddressLine3(), null, to.getCity(), null, CountryCodes.LK.toString(), null, null)); //
-        tPersonMyClient.setEmail(to.getEmail());
-        tPersonMyClient.setOccupation(to.getOccupation()); //
-        tPersonMyClient.setEmployerName(to.getEmployerName());
-//        tPersonMyClient.setEmployerAddressId(new TAddress(ContactTypes.UNKNOWN, to.getEmployerAddress(), null, null, null, CountryCodes.LK.toString(), null, null));
-        tPersonMyClient.setEmployerPhoneId(null);
-        tPersonMyClient.setIdentification(null);
-        tPersonMyClient.setDeceased(null);
-        tPersonMyClient.setTaxNumber(to.getIncomeTaxFileNumber());
-        tPersonMyClient.setTaxRegNumber(null);
-        tPersonMyClient.setSourceOfWealth(null);
-        tPersonMyClient.setComments(null);
-        return tPersonMyClient;
-    }
-
-    private TEntityMyClient createTEntityMyClientForTo(CommonDetails to) {
-        TEntityMyClient tEntityMyClient = new TEntityMyClient();
-        tEntityMyClient.setName(to.getFirstName()); //
-        tEntityMyClient.setCommercialName(null);
-        tEntityMyClient.setIncorporationLegalForm(EntityLegalFormTypes.OTH.toString()); // please change
-        tEntityMyClient.setIncorporationNumber(to.getBusinessRegistrationNumber());
-        tEntityMyClient.setBusiness(BusinessCategory.SLSIC.toString()); //
-        tEntityMyClient.setPhone(null);
-//        if (to.getBusinessPhonePrimary() != null) {
-//            if (to.getBusinessPhonePrimary().trim().startsWith("07")) {
-//                tEntityMyClient.setPhone(new TPhone(ContactTypes.BUSN, CommunicationTypes.MOPH, "94", to.getBusinessPhonePrimary(), null, null));
-//            } else {
-//                tEntityMyClient.setPhone(new TPhone(ContactTypes.BUSN, CommunicationTypes.LNPH, "94", to.getBusinessPhonePrimary(), null, null));
-//            }
-//        }
-        tEntityMyClient.setAddress(new TAddress(ContactTypes.UNKNOWN, to.getAddressLine1() + to.getAddressLine2() + to.getAddressLine3(), null, to.getCity(), null, CountryCodes.LK, null, null)); //
-        tEntityMyClient.setEmail(to.getBusinessEmail()); //
-        tEntityMyClient.setUrl(to.getWebAddress());
-        tEntityMyClient.setIncorporationState(null);
-        tEntityMyClient.setIncorporationCountryCode(CountryCodes.LK.toString()); //
-        tEntityMyClient.setDirectorId(createDirectorId(to)); //
-        tEntityMyClient.setIncorporationDate(null);
-        tEntityMyClient.setBusinessClosed(null);
-        tEntityMyClient.setDateBusinessClosed(null);
-        tEntityMyClient.setTaxNumber(to.getIncomeTaxFileNumber());
-        tEntityMyClient.setTaxNumber(null);
-        tEntityMyClient.setComments(null);
-        return tEntityMyClient;
-    }
-
-    private DirectorId createDirectorId(CommonDetails to) {
+    @Override
+    public DirectorId createDirectorId(CommonDetails to) {
         DirectorId directorId = new DirectorId();
         directorId.setGender(null);
         directorId.setTitle(null);
@@ -321,4 +220,42 @@ public class ConvertServiceImpl implements ConvertService {
         return directorId;
     }
 
+    @Override
+    public Transaction createTransaction(TransactionResponse transactionResponse1) {
+        Transaction transaction = new Transaction();
+        transaction.setTransactionNumber(transactionResponse1.getTransactionNumber()); //
+        transaction.setInternalRefNumber(null);
+        transaction.setTransactionLocation(null);
+//                if (transaction.getTransmodeCode() != null && transaction.getTransmodeCode().equals(ConductionTypes.BRCH)) { // <-- if transmode_code is branch
+//                    transaction.setTransactionLocation("Location"); // change this
+//                } else {
+//                    transaction.setTransactionLocation(null);
+//                }
+        transaction.setTransactionDescription(transactionResponse1.getTransactionDescription()); //
+        transaction.setDateTransaction(preProcessService.formatDateInCorrectFormat(transactionResponse1.getDateTransaction().toString())); //
+        transaction.setTeller(null);
+        transaction.setAuthorized(null);
+        transaction.setLateDeposit(null);
+        transaction.setDatePosting(null);
+        transaction.setValueDate(null);
+        transaction.setTransmodeCode(ConductionTypes.MBWL);
+        transaction.setTransmodeComment(null);
+//                if (transaction.getTransmodeCode() != null && transaction.getTransmodeCode().equals(ConductionTypes.UNKNOWN)) { // <-- if transmode code is unknown
+//                    transaction.setTransmodeComment("Comment"); // change this
+//                } else {
+//                    transaction.setTransmodeComment(null);
+//                }
+        transaction.setAmountLocal(transactionResponse1.getTxnAmount()); //
+        // From side
+        TFromMyClient tFromMyClient = myClientService.convertDataToTFromMyClient(transactionResponse1.getFrom());
+        fromAndToValidationService.validateTFromMyClient(tFromMyClient);  // tFromMyClient Validation
+        transaction.setTFromMyClient(tFromMyClient);
+        // To side
+        TToMyClient tToMyClient = myClientService.convertDataTOTTOMyClient(transactionResponse1.getTo());
+        fromAndToValidationService.validateTToMyClient(tToMyClient); // tToMyClient Validation
+        transaction.setTToMyClient(tToMyClient);
+        transaction.setGoodsServices(null);
+        transaction.setComments(null);
+        return transaction;
+    }
 }

@@ -8,12 +8,6 @@ import java.util.List;
 public interface TransactionService {
     List<ModifyUserTypesResponse> getUserTypes();
 
-    List<MerchantDetails> getMerchantDetails();
-
-    List<CustomerDetails> getCustomerDetails();
-
-    List<ReSellerDetails> getReSellerDetails();
-
     List<TransactionResponse> getTransactions();
 
     String getTransactionsXml() throws JsonProcessingException;

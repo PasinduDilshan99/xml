@@ -488,7 +488,8 @@ public class CommonValidationServiceImpl implements CommonValidationService {
     }
 
 
-    private void validateDateFormat(String date, boolean required, String name) {
+    @Override
+    public void validateDateFormat(String date, boolean required, String name) {
         if (date == null || date.trim().isEmpty()) {
             if (required) {
                 logger.error("{} date is required.", name);
@@ -511,7 +512,8 @@ public class CommonValidationServiceImpl implements CommonValidationService {
         }
     }
 
-    private void validateDateIsInPast(String date, String name) {
+    @Override
+    public void validateDateIsInPast(String date, String name) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
             LocalDateTime parsedDate = LocalDateTime.parse(date, formatter);

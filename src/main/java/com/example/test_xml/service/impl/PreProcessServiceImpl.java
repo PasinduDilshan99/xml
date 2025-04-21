@@ -3,6 +3,7 @@ package com.example.test_xml.service.impl;
 import com.example.test_xml.exception.InvalidDataErrorException;
 import com.example.test_xml.exception.ValidationErrorException;
 import com.example.test_xml.model.enums.CountryCodes;
+import com.example.test_xml.model.enums.EntityLegalFormTypes;
 import com.example.test_xml.model.response.ExtractNameResponse;
 import com.example.test_xml.service.PreProcessService;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public class PreProcessServiceImpl implements PreProcessService {
         for (int i = 0; i < parts.length - 1; i++) {
             lastNameBuilder.append(parts[i]);
             if (i < parts.length - 2) {
-                lastNameBuilder.append(" ");
+                lastNameBuilder.append(".");
             }
         }
 
@@ -62,10 +63,19 @@ public class PreProcessServiceImpl implements PreProcessService {
 
     @Override
     public String formatDateInCorrectFormat(String date) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(date, inputFormatter);
-        return dateTime.format(outputFormatter);
+        if (date != null) {
+            try {
+                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+                DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                LocalDateTime dateTime = LocalDateTime.parse(date, inputFormatter);
+                return dateTime.format(outputFormatter);
+            } catch (Exception e) {
+                logger.error("Error occur when formatted the data in correct format. : {}", e.toString());
+                throw new ValidationErrorException("Error occur when formatted the data in correct format. : " + e);
+            }
+        } else {
+            return null;
+        }
     }
 
 
@@ -160,5 +170,41 @@ public class PreProcessServiceImpl implements PreProcessService {
             logger.error("Error occurred when mobile number standardization. {}", mobileNumber);
             throw new InvalidDataErrorException("Mobile Number is not in correct format.");
         }
+    }
+
+    @Override
+    public String prepareBusinessType(String businessType) {
+        if (businessType != null) {
+            if (businessType.trim().equalsIgnoreCase("associations")) {
+                return EntityLegalFormTypes.ASOC.toString();
+            } else if (businessType.trim().equalsIgnoreCase("authority")) {
+                return EntityLegalFormTypes.ASOC.toString(); //
+            } else if (businessType.trim().equalsIgnoreCase("clubs")) {
+                return EntityLegalFormTypes.CLUB.toString();
+            } else if (businessType.trim().equalsIgnoreCase("corporations")) {
+                return EntityLegalFormTypes.ASOC.toString(); //
+            } else if (businessType.trim().equalsIgnoreCase("government boards")) {
+                return EntityLegalFormTypes.ASOC.toString(); //
+            } else if (businessType.trim().equalsIgnoreCase("government establishments")) {
+                return EntityLegalFormTypes.ASOC.toString(); //
+            } else if (businessType.trim().equalsIgnoreCase("limited liability companies")) {
+                return EntityLegalFormTypes.ASOC.toString(); //
+            } else if (businessType.trim().equalsIgnoreCase("partnerships")) {
+                return EntityLegalFormTypes.PTNR.toString();
+            } else if (businessType.trim().equalsIgnoreCase("private limited company")) {
+                return EntityLegalFormTypes.PVTL.toString();
+            } else if (businessType.trim().equalsIgnoreCase("public quoted company")) {
+                return EntityLegalFormTypes.ASOC.toString(); //
+            } else if (businessType.trim().equalsIgnoreCase("societies")) {
+                return EntityLegalFormTypes.SOCT.toString();
+            } else if (businessType.trim().equalsIgnoreCase("sole proprietorship")) {
+                return EntityLegalFormTypes.SOLE.toString();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
     }
 }

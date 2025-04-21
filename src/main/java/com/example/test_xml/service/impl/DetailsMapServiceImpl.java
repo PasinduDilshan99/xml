@@ -34,6 +34,7 @@ public class DetailsMapServiceImpl implements DetailsMapService {
             commonDetails.setNationality1(customer.getNationality1());
             commonDetails.setCity(customer.getCity());
             commonDetails.setState(customer.getState());
+            commonDetails.setBusinessType(customer.getBusinessType());
             commonDetails.setPhonesPrimary(customer.getPhonesPrimary());
             commonDetails.setPhonesSecondary(customer.getPhonesSecondary());
             commonDetails.setEmail(customer.getEmail());
@@ -69,6 +70,7 @@ public class DetailsMapServiceImpl implements DetailsMapService {
             commonDetails.setNationality1(reSeller.getNationality1());
             commonDetails.setCity(reSeller.getCity());
             commonDetails.setState(reSeller.getState());
+            commonDetails.setBusinessType(reSeller.getBusinessType());
             commonDetails.setPhonesPrimary(reSeller.getPhonesPrimary());
             commonDetails.setPhonesSecondary(reSeller.getPhonesSecondary());
             commonDetails.setEmail(reSeller.getEmail());
@@ -125,6 +127,7 @@ public class DetailsMapServiceImpl implements DetailsMapService {
             commonDetails.setNationality1(merchant.getNationality1());
             commonDetails.setCity(merchant.getCity());
             commonDetails.setState(merchant.getState());
+            commonDetails.setBusinessType(merchant.getBusinessType());
             commonDetails.setPhonesPrimary(merchant.getPhonesPrimary());
             commonDetails.setPhonesSecondary(merchant.getPhonesSecondary());
             commonDetails.setEmail(merchant.getEmail());

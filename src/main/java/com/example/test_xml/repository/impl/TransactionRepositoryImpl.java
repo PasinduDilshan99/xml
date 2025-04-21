@@ -86,6 +86,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 merchantDetails.setNationality1(rs.getString("nationality1"));
                 merchantDetails.setCity(rs.getString("city"));
                 merchantDetails.setState(rs.getString("state"));
+                merchantDetails.setBusinessType(rs.getString("business_type"));
                 merchantDetails.setPhonesPrimary(rs.getString("phones_primary"));
                 merchantDetails.setPhonesSecondary(rs.getString("phones_secondary"));
                 merchantDetails.setEmail(rs.getString("email"));
@@ -131,7 +132,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             return Collections.emptyList();
         }
 
-
         String inSql = accountIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
@@ -156,6 +156,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 customerDetails.setNationality1(rs.getString("nationality1"));
                 customerDetails.setCity(rs.getString("city"));
                 customerDetails.setState(rs.getString("state"));
+                customerDetails.setBusinessType(rs.getString("business_type"));
                 customerDetails.setPhonesPrimary(rs.getString("phones_primary"));
                 customerDetails.setPhonesSecondary(rs.getString("phones_secondary"));
                 customerDetails.setEmail(rs.getString("email"));
@@ -203,6 +204,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 reSellerDetails.setNationality1(rs.getString("nationality1"));
                 reSellerDetails.setCity(rs.getString("city"));
                 reSellerDetails.setState(rs.getString("state"));
+                reSellerDetails.setBusinessType(rs.getString("business_type"));
                 reSellerDetails.setPhonesPrimary(rs.getString("phones_primary"));
                 reSellerDetails.setPhonesSecondary(rs.getString("phones_secondary"));
                 reSellerDetails.setEmail(rs.getString("email"));
