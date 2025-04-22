@@ -42,7 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.detailsMapService = detailsMapService;
         this.transactionValidationService = transactionValidationService;
         this.commonService = commonService;
-        this.createService =createService;
+        this.createService = createService;
     }
 
     @Value("${report.details.rentity.branch}")
@@ -97,10 +97,12 @@ public class TransactionServiceImpl implements TransactionService {
                 merchantList.add(modifyUserTypesResponse.getFromAccNo());
             }
             if (modifyUserTypesResponse.getToUserTypes().equals(UserTypes.CUSTOMER)) {
-                customerList.add(modifyUserTypesResponse.getToAccNo());
+//                customerList.add(modifyUserTypesResponse.getToAccNo());
+                merchantList.add(modifyUserTypesResponse.getToAccNo());
             }
             if (modifyUserTypesResponse.getToUserTypes().equals(UserTypes.RETAILER)) {
-                resellerList.add(modifyUserTypesResponse.getToAccNo());
+//                resellerList.add(modifyUserTypesResponse.getToAccNo());
+                merchantList.add(modifyUserTypesResponse.getToAccNo());
             }
             if (modifyUserTypesResponse.getToUserTypes().equals(UserTypes.MERCHANT)) {
                 merchantList.add(modifyUserTypesResponse.getToAccNo());

@@ -3,30 +3,30 @@ package com.example.test_xml.util;
 public class Queries {
 
     public static final String GET_USER_TYPES = """
-SELECT
-  t.ID AS TRANSACTION_ID,
-  t.TXN_AMOUNT,
-  t.TXN_CODE,
-  t.NOTE AS TRANSACTION_DESCRIPTION,
-  t.TXN_DATE AS DATE_TRANSACTION,
-  t.TXN_MODE AS TRANSMODE,
-  t.TXN_REF AS TRANSACTION_NUMBER,
-  uw_from.WALLET_TYPE AS FROM_WALLET_TYPE,
-  ua_from.ACC_TYPE AS FROM_ACC_TYPE,
-  ua_from.ACC_NO AS FROM_ACC_NO,
-  uw_to.WALLET_TYPE AS TO_WALLET_TYPE,
-  ua_to.ACC_TYPE AS TO_ACC_TYPE,
-  ua_to.ACC_NO AS TO_ACC_NO
-FROM mwalletuser.MWT_WALLET_TRANSACTIONS t  
-JOIN mwalletuser.MWT_USER_ACCOUNT ua_from ON t.A_NUMBER = ua_from.ACC_NO
-JOIN mwalletuser.MWT_USER_WALLET uw_from ON t.A_NUMBER = uw_from.ACC_ID
-JOIN mwalletuser.MWT_USER_ACCOUNT ua_to ON t.B_NUMBER = ua_to.ACC_NO
-JOIN mwalletuser.MWT_USER_WALLET uw_to ON t.B_NUMBER = uw_to.ACC_ID
-WHERE t.TXN_AMOUNT >= 1000000
-  AND t.txn_code NOT IN (6, 7, 8, 12, 13, 42, 18, 21, 24, 25, 26, 27, 32, 34, 35, 36)
-  AND ua_from.ACC_TYPE NOT IN ('TCA', 'ACR', 'MCR', 'RLC', 'MCA', 'UTL', 'OOW', 'DCA', 'RLD', 'IOW')
-  AND t.TXN_DATE BETWEEN TO_DATE('2023-03-17', 'YYYY-MM-DD') AND TO_DATE('2023-03-18', 'YYYY-MM-DD')
-            """;
+            SELECT
+              t.ID AS TRANSACTION_ID,
+              t.TXN_AMOUNT,
+              t.TXN_CODE,
+              t.NOTE AS TRANSACTION_DESCRIPTION,
+              t.TXN_DATE AS DATE_TRANSACTION,
+              t.TXN_MODE AS TRANSMODE,
+              t.TXN_REF AS TRANSACTION_NUMBER,
+              uw_from.WALLET_TYPE AS FROM_WALLET_TYPE,
+              ua_from.ACC_TYPE AS FROM_ACC_TYPE,
+              ua_from.ACC_NO AS FROM_ACC_NO,
+              uw_to.WALLET_TYPE AS TO_WALLET_TYPE,
+              ua_to.ACC_TYPE AS TO_ACC_TYPE,
+              ua_to.ACC_NO AS TO_ACC_NO
+            FROM mwalletuser.MWT_WALLET_TRANSACTIONS t
+            JOIN mwalletuser.MWT_USER_ACCOUNT ua_from ON t.A_NUMBER = ua_from.ACC_NO
+            JOIN mwalletuser.MWT_USER_WALLET uw_from ON t.A_NUMBER = uw_from.ACC_ID
+            JOIN mwalletuser.MWT_USER_ACCOUNT ua_to ON t.B_NUMBER = ua_to.ACC_NO
+            JOIN mwalletuser.MWT_USER_WALLET uw_to ON t.B_NUMBER = uw_to.ACC_ID
+            WHERE t.TXN_AMOUNT >= 1000000
+              AND t.txn_code NOT IN (6, 7, 8, 12, 13, 42, 18, 21, 24, 25, 26, 27, 32, 34, 35, 36)
+              AND ua_from.ACC_TYPE NOT IN ('TCA', 'ACR', 'MCR', 'RLC', 'MCA', 'UTL', 'OOW', 'DCA', 'RLD', 'IOW')
+              AND t.TXN_DATE BETWEEN TO_DATE('2023-03-17', 'YYYY-MM-DD') AND TO_DATE('2023-03-18', 'YYYY-MM-DD')
+                        """;
 
     public static final String GET_MERCHANT_DETAILS = """
             SELECT
@@ -84,96 +84,96 @@ WHERE t.TXN_AMOUNT >= 1000000
             """;
 
     public static final String GET_CUSTOMER_DETAILS = """
-            SELECT
-                uw.ACC_ID AS id,
-                uw.NAME AS first_name,
-                uw.ADDR_NAME AS address_name,
-                uw.ADDR_LINE1 AS address_line1,
-                uw.ADDR_LINE2 AS address_line2,
-                uw.ADDR_LINE3 AS address_line3,
-                uw.SHORT_NAME AS alias,
-                uw.TITLE AS title,
-                uw.NIC_NO AS id_number,
-                uw.DOB AS birthdate,
-                uw.MOTHER_NAME AS mothers_name,
-                uw.NATIONALITY AS nationality1,
-                uw.CITY AS city,
-                uw.DISTRICT AS state,
-                uw.CONTACT_NO1 AS phones_primary,
-                uw.CONTACT_NO2 AS phones_secondary,
-                uw.EMAIL AS email,
-                uw.OCCUPATION AS occupation,
-                uw.NAME_OF_EMP AS employer_name,
-                uw.ADDR_OF_EMP AS employer_address,
-                uw.SOR_OF_INCOME AS source_of_wealth,
-                uw.USER_VERIFIED AS user_verified,
-                uw.DOCCUMENTS_VERIFIED AS documents_verified,
-                bt.DESCRIPTION AS business_type
-            FROM mwalletuser.MWT_USER_WALLET_DETAILS uw
-            LEFT JOIN mwalletuser.MWT_BUSINESS_TYPE bt
-                ON CASE
-                    WHEN REGEXP_LIKE(uw.BUSINESS_TYPE, '^\\d+$') THEN TO_NUMBER(uw.BUSINESS_TYPE)
-                    ELSE NULL
-                   END = bt.ID
-            WHERE uw.ACC_ID IN (%s)
-        """;
+                SELECT
+                    uw.ACC_ID AS id,
+                    uw.NAME AS first_name,
+                    uw.ADDR_NAME AS address_name,
+                    uw.ADDR_LINE1 AS address_line1,
+                    uw.ADDR_LINE2 AS address_line2,
+                    uw.ADDR_LINE3 AS address_line3,
+                    uw.SHORT_NAME AS alias,
+                    uw.TITLE AS title,
+                    uw.NIC_NO AS id_number,
+                    uw.DOB AS birthdate,
+                    uw.MOTHER_NAME AS mothers_name,
+                    uw.NATIONALITY AS nationality1,
+                    uw.CITY AS city,
+                    uw.DISTRICT AS state,
+                    uw.CONTACT_NO1 AS phones_primary,
+                    uw.CONTACT_NO2 AS phones_secondary,
+                    uw.EMAIL AS email,
+                    uw.OCCUPATION AS occupation,
+                    uw.NAME_OF_EMP AS employer_name,
+                    uw.ADDR_OF_EMP AS employer_address,
+                    uw.SOR_OF_INCOME AS source_of_wealth,
+                    uw.USER_VERIFIED AS user_verified,
+                    uw.DOCCUMENTS_VERIFIED AS documents_verified,
+                    bt.DESCRIPTION AS business_type
+                FROM mwalletuser.MWT_USER_WALLET_DETAILS uw
+                LEFT JOIN mwalletuser.MWT_BUSINESS_TYPE bt
+                    ON CASE
+                        WHEN REGEXP_LIKE(uw.BUSINESS_TYPE, '^\\d+$') THEN TO_NUMBER(uw.BUSINESS_TYPE)
+                        ELSE NULL
+                       END = bt.ID
+                WHERE uw.ACC_ID IN (%s)
+            """;
 
     public static final String GET_RESELLER_DETAILS = """
-            SELECT
-                uw.ACC_ID AS id,
-                uw.NAME AS first_name,
-                uw.ADDR_NAME AS address_name,
-                uw.ADDR_LINE1 AS address_line1,
-                uw.ADDR_LINE2 AS address_line2,
-                uw.ADDR_LINE3 AS address_line3,
-                uw.SHORT_NAME AS alias,
-                uw.TITLE AS title,
-                uw.NIC_NO AS id_number,
-                uw.DOB AS birthdate,
-                uw.MOTHER_NAME AS mothers_name,
-                uw.NATIONALITY AS nationality1,
-                uw.CITY AS city,
-                uw.DISTRICT AS state,
-                bt.DESCRIPTION AS business_type,
-                uw.CONTACT_NO1 AS phones_primary,
-                uw.CONTACT_NO2 AS phones_secondary,
-                uw.EMAIL AS email,
-                uw.OCCUPATION AS occupation,
-                uw.NAME_OF_EMP AS employer_name,
-                uw.ADDR_OF_EMP AS employer_address,
-                uw.SOR_OF_INCOME AS source_of_wealth,
-                uw.USER_VERIFIED AS user_verified,
-                uw.DOCCUMENTS_VERIFIED AS documents_verified,
-                rd.ANNUAL_INCOME AS annual_income,
-                rd.BANK_ACC_NO AS bank_account_number,
-                rd.BANK_CODE AS bank_code,
-                rd.BANK_NAME AS bank_name,
-                rd.BRANCH_CODE AS branch_code,
-                rd.BRANCH_NAME AS branch_name,
-                rd.BUSI_ALRDY_REG AS business_already_registered,
-                rd.BUSI_COMMENCE_AT AS business_commencement_date,
-                rd.BUSSINESS_REG_NO AS business_registration_number,
-                rd.CONTACT_NO1 AS business_phone_primary,
-                rd.CONTACT_NO2 AS business_phone_secondary,
-                rd.CONTACT_PERSON AS business_contact_person,
-                rd.DIFF_MAIL_ADDRESS AS different_mailing_address,
-                rd.EMAIL AS business_email,
-                rd.INCOME_TAX_FILE_NO AS income_tax_file_number,
-                rd.OTHER_CON_BUSI AS other_connected_business,
-                rd.PARTNER_CODE AS partner_code,
-                rd.SETTLEMENT AS settlement_status,
-                rd.SETTLEMENT_METHOD AS settlement_method,
-                rd.SOURCE_OF_INCOME AS source_of_income,
-                rd.SOURCE_OF_INCOME_OTHER AS source_of_income_other
-            FROM mwalletuser.MWT_USER_WALLET_DETAILS uw
-            JOIN mwalletuser.MWT_RESELLER_DETAILS rd ON uw.ACC_ID = rd.ACC_ID
-            LEFT JOIN mwalletuser.MWT_BUSINESS_TYPE bt
-                ON CASE
-                    WHEN REGEXP_LIKE(uw.BUSINESS_TYPE, '^\\d+$') THEN TO_NUMBER(uw.BUSINESS_TYPE)
-                    ELSE NULL
-                   END = bt.ID
-         WHERE uw.ACC_ID IN (%s)
-            """;
+               SELECT
+                   uw.ACC_ID AS id,
+                   uw.NAME AS first_name,
+                   uw.ADDR_NAME AS address_name,
+                   uw.ADDR_LINE1 AS address_line1,
+                   uw.ADDR_LINE2 AS address_line2,
+                   uw.ADDR_LINE3 AS address_line3,
+                   uw.SHORT_NAME AS alias,
+                   uw.TITLE AS title,
+                   uw.NIC_NO AS id_number,
+                   uw.DOB AS birthdate,
+                   uw.MOTHER_NAME AS mothers_name,
+                   uw.NATIONALITY AS nationality1,
+                   uw.CITY AS city,
+                   uw.DISTRICT AS state,
+                   bt.DESCRIPTION AS business_type,
+                   uw.CONTACT_NO1 AS phones_primary,
+                   uw.CONTACT_NO2 AS phones_secondary,
+                   uw.EMAIL AS email,
+                   uw.OCCUPATION AS occupation,
+                   uw.NAME_OF_EMP AS employer_name,
+                   uw.ADDR_OF_EMP AS employer_address,
+                   uw.SOR_OF_INCOME AS source_of_wealth,
+                   uw.USER_VERIFIED AS user_verified,
+                   uw.DOCCUMENTS_VERIFIED AS documents_verified,
+                   rd.ANNUAL_INCOME AS annual_income,
+                   rd.BANK_ACC_NO AS bank_account_number,
+                   rd.BANK_CODE AS bank_code,
+                   rd.BANK_NAME AS bank_name,
+                   rd.BRANCH_CODE AS branch_code,
+                   rd.BRANCH_NAME AS branch_name,
+                   rd.BUSI_ALRDY_REG AS business_already_registered,
+                   rd.BUSI_COMMENCE_AT AS business_commencement_date,
+                   rd.BUSSINESS_REG_NO AS business_registration_number,
+                   rd.CONTACT_NO1 AS business_phone_primary,
+                   rd.CONTACT_NO2 AS business_phone_secondary,
+                   rd.CONTACT_PERSON AS business_contact_person,
+                   rd.DIFF_MAIL_ADDRESS AS different_mailing_address,
+                   rd.EMAIL AS business_email,
+                   rd.INCOME_TAX_FILE_NO AS income_tax_file_number,
+                   rd.OTHER_CON_BUSI AS other_connected_business,
+                   rd.PARTNER_CODE AS partner_code,
+                   rd.SETTLEMENT AS settlement_status,
+                   rd.SETTLEMENT_METHOD AS settlement_method,
+                   rd.SOURCE_OF_INCOME AS source_of_income,
+                   rd.SOURCE_OF_INCOME_OTHER AS source_of_income_other
+               FROM mwalletuser.MWT_USER_WALLET_DETAILS uw
+               JOIN mwalletuser.MWT_RESELLER_DETAILS rd ON uw.ACC_ID = rd.ACC_ID
+               LEFT JOIN mwalletuser.MWT_BUSINESS_TYPE bt
+                   ON CASE
+                       WHEN REGEXP_LIKE(uw.BUSINESS_TYPE, '^\\d+$') THEN TO_NUMBER(uw.BUSINESS_TYPE)
+                       ELSE NULL
+                      END = bt.ID
+            WHERE uw.ACC_ID IN (%s)
+               """;
 
 
 }
