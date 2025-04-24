@@ -37,4 +37,5 @@ public class TAddress {
 
     @JacksonXmlProperty(localName = "comments")
     private String comments;
+
 }

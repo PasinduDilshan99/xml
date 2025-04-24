@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -34,4 +33,5 @@ public class TPersonIdentification {
 
     @JacksonXmlProperty(localName = "comments")
     private String comments;
+
 }

@@ -13,4 +13,5 @@ public class ReportIndicator {
 
     @JacksonXmlProperty(localName = "indicator")
     private ReportIndicatorTypes indicator;
+
 }

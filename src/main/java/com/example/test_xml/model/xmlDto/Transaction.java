@@ -3,17 +3,12 @@ package com.example.test_xml.model.xmlDto;
 import com.example.test_xml.model.enums.ConductionTypes;
 import com.example.test_xml.model.xmlDto.from.TFromMyClient;
 import com.example.test_xml.model.xmlDto.to.TToMyClient;
-import com.example.test_xml.model.xmlDto.to.ToAccount;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor

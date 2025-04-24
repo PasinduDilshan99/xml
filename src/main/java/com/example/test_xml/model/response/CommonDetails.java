@@ -4,7 +4,6 @@ import com.example.test_xml.model.enums.db.UserTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -12,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommonDetails {
+
     private int id;
     private String firstName;
     private String addressName;
@@ -91,4 +91,5 @@ public class CommonDetails {
     private String utilityCompany;
     private String webAddress;
     private UserTypes userType;
+
 }

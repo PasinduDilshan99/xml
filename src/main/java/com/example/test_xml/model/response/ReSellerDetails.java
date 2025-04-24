@@ -3,15 +3,14 @@ package com.example.test_xml.model.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReSellerDetails extends CommonDetailsResponse{
+
     private int id;
     private String firstName;
     private String addressName;
@@ -57,4 +56,5 @@ public class ReSellerDetails extends CommonDetailsResponse{
     private String settlementMethod;
     private String sourceOfIncome;
     private String sourceOfIncomeOther;
+
 }

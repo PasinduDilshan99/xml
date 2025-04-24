@@ -1,7 +1,6 @@
 package com.example.test_xml.model.xmlDto.from;
 
 import com.example.test_xml.model.enums.CountryCodes;
-import com.example.test_xml.model.enums.Currencies;
 import com.example.test_xml.model.enums.FundsTypes;
 import com.example.test_xml.model.xmlDto.TForeignCurrency;
 import com.example.test_xml.model.xmlDto.pae.TEntityMyClient;

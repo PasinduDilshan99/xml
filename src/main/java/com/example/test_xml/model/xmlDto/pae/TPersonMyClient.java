@@ -1,14 +1,9 @@
 package com.example.test_xml.model.xmlDto.pae;
 
-import com.example.test_xml.model.enums.EntityPersonRoleTypes;
-import com.example.test_xml.model.enums.GenderTypes;
 import com.example.test_xml.model.xmlDto.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data

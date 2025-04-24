@@ -21,4 +21,5 @@ public enum AccountPersonRoleTypes {
     public String getDescription() {
         return description;
     }
+
 }

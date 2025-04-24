@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Passport {
+
     @JacksonXmlProperty(localName = "passport_number")
     private String passportNumber;
 
     @JacksonXmlProperty(localName = "passport_country")
     private String passportCountry;
+
 }

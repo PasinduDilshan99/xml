@@ -11,22 +11,29 @@ public class Queries {
               t.TXN_DATE AS DATE_TRANSACTION,
               t.TXN_MODE AS TRANSMODE,
               t.TXN_REF AS TRANSACTION_NUMBER,
+              t.UTILITY_TYPE AS UTILITY_TYPE,
               uw_from.WALLET_TYPE AS FROM_WALLET_TYPE,
               ua_from.ACC_TYPE AS FROM_ACC_TYPE,
               ua_from.ACC_NO AS FROM_ACC_NO,
               uw_to.WALLET_TYPE AS TO_WALLET_TYPE,
               ua_to.ACC_TYPE AS TO_ACC_TYPE,
-              ua_to.ACC_NO AS TO_ACC_NO
+              ut.UTIL_ACC_ID AS TO_ACC_NO
             FROM mwalletuser.MWT_WALLET_TRANSACTIONS t
-            JOIN mwalletuser.MWT_USER_ACCOUNT ua_from ON t.A_NUMBER = ua_from.ACC_NO
-            JOIN mwalletuser.MWT_USER_WALLET uw_from ON t.A_NUMBER = uw_from.ACC_ID
-            JOIN mwalletuser.MWT_USER_ACCOUNT ua_to ON t.B_NUMBER = ua_to.ACC_NO
-            JOIN mwalletuser.MWT_USER_WALLET uw_to ON t.B_NUMBER = uw_to.ACC_ID
-            WHERE t.TXN_AMOUNT >= 1000000
-              AND t.txn_code NOT IN (6, 7, 8, 12, 13, 42, 18, 21, 24, 25, 26, 27, 32, 34, 35, 36)
-              AND ua_from.ACC_TYPE NOT IN ('TCA', 'ACR', 'MCR', 'RLC', 'MCA', 'UTL', 'OOW', 'DCA', 'RLD', 'IOW')
-              AND t.TXN_DATE BETWEEN TO_DATE('2023-03-17', 'YYYY-MM-DD') AND TO_DATE('2023-03-18', 'YYYY-MM-DD')
-                        """;
+            LEFT JOIN mwalletuser.MWT_USER_WALLET uw_from ON t.A_NUMBER = uw_from.ID
+            LEFT JOIN mwalletuser.MWT_USER_ACCOUNT ua_from ON uw_from.ACC_ID = ua_from.ACC_NO
+            LEFT JOIN mwalletuser.MWT_USER_WALLET uw_to ON t.B_NUMBER = uw_to.ACC_ID
+            LEFT JOIN mwalletuser.MWT_USER_ACCOUNT ua_to ON uw_to.ACC_ID = ua_to.ACC_NO
+            LEFT JOIN (
+                SELECT
+                    ACC_ID AS UTIL_ACC_ID,
+                    MER_SHORT_CODE || MCC AS UTILITY_TYPE_COMPOSITE
+                FROM mwalletuser.mwt_merchant_details
+            ) ut ON ut.UTILITY_TYPE_COMPOSITE = t.UTILITY_TYPE
+            WHERE t.TXN_AMOUNT >= ?
+              AND t.txn_code NOT IN (6, 7, 8, 12, 13, 42, 18, 21, 24, 25, 26, 27, 32, 34, 35, 36, 10, 38)
+              AND uw_from.WALLET_TYPE NOT IN ('TCA', 'ACR', 'MCR', 'RLC', 'MCA', 'UTL', 'OOW', 'DCA', 'RLD', 'IOW')
+              AND t.TXN_DATE BETWEEN TO_DATE('2025-03-01', 'YYYY-MM-DD') AND TO_DATE('2025-04-01', 'YYYY-MM-DD')
+                                    """;
 
     public static final String GET_MERCHANT_DETAILS = """
             SELECT

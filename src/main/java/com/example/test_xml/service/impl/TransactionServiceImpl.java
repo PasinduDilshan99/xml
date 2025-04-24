@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -67,6 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
             modifyUserTypesResponse.setDateTransaction(getUserTypesResponse.getDateTransaction());
             modifyUserTypesResponse.setTransmodeCode(getUserTypesResponse.getTransmodeCode());
             modifyUserTypesResponse.setTransactionNumber(getUserTypesResponse.getTransactionNumber());
+            modifyUserTypesResponse.setUtilityType(getUserTypesResponse.getUtilityType());
             modifyUserTypesResponse.setFromAccNo(getUserTypesResponse.getFromAccNo());
             modifyUserTypesResponse.setToAccNo(getUserTypesResponse.getToAccNo());
             modifyUserTypesResponse.setFromUserTypes(UserTypes.valueOf(commonService.setUserTypesAccordingToWalletTypeAndAccountType(getUserTypesResponse.getFromAccType(), getUserTypesResponse.getFromWalletType())));
@@ -157,36 +160,51 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public String getTransactionsXml() throws JsonProcessingException {
-
         List<TransactionResponse> transactions = getTransactions();
         List<Transaction> transactionList = new ArrayList<>();
+
         for (TransactionResponse transactionResponse1 : transactions) {
             Transaction transaction = createService.createTransaction(transactionResponse1);
             transactionValidationService.validateTransaction(transaction); // transaction validation
             transactionList.add(transaction);
         }
+
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
         Report report = new Report(
-                153, //
-                null, // optional --> reportRentityBranch
-                SubmissionTypes.E, //
-                ReportCodes.EFT, //
+                153,
+                null,
+                SubmissionTypes.E,
+                ReportCodes.EFT,
                 null,
                 null,
-                timestamp.toLocalDateTime()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), //
+                timestamp.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                 Currencies.LKR,
-                commonService.createReportingPerson(), // optional --> createReportingPerson()
-                null, // optional --> new TAddress(ContactTypes.CORS, reportAddressAddress, null, reportAddressCity, null, CountryCodes.LK, null, null),
+                commonService.createReportingPerson(),
                 null,
                 null,
-                transactionList, //
-                new ReportIndicator(ReportIndicatorTypes.EFT) //
+                null,
+                transactionList,
+                new ReportIndicator(ReportIndicatorTypes.EFT)
         );
+
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//        xmlMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        return xmlMapper.writeValueAsString(report);
+
+        // Convert object to XML string
+        String xmlContent = xmlMapper.writeValueAsString(report);
+
+        // Save XML to file
+        try {
+            File file = new File("C:\\Users\\pasindudi\\Desktop\\goAML\\report.xml");
+            xmlMapper.writeValue(file, report);
+            System.out.println("XML file saved successfully at: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return xmlContent;
     }
+
 
 }

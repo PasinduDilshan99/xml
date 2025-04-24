@@ -30,5 +30,4 @@ public class TPhone {
     @JacksonXmlProperty(localName = "comments")
     private String comments;
 
-
 }

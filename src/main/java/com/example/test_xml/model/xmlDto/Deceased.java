@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Deceased {
+
     @JacksonXmlProperty(localName = "deceased")
     private String deceased;
 
     @JacksonXmlProperty(localName = "date_deceased")
     private String dateDeceased;
+
 }

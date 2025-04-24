@@ -1,6 +1,7 @@
 package com.example.test_xml.model.enums;
 
 public enum AccountStatusTypes {
+
     ACTV("Active"),
     CLSD("Closed"),
     CLBC("Closed by customer"),
@@ -20,4 +21,5 @@ public enum AccountStatusTypes {
     public String getDescription() {
         return description;
     }
+
 }

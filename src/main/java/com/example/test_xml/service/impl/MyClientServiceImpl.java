@@ -44,20 +44,14 @@ public class MyClientServiceImpl implements MyClientService {
 //        }
         tFromMyClient.setFromForeignCurrency(null);
         tFromMyClient.setTConductor(null);
-        logger.info("*********************");
-        logger.info("before : {}", from.getUserType());
         if (from.getUserType().equals(UserTypes.CUSTOMER)) {
             // From person
             tFromMyClient.setTPersonMyClient(createService.createTPersonMyClient(from));
             tPersonMyClientValidation.validateTPersonMyClient(tFromMyClient.getTPersonMyClient());  // tPersonMyClient validation
-            logger.info("after : {}", from.getUserType());
-            logger.info("*********************");
         } else if (from.getUserType().equals(UserTypes.MERCHANT) || from.getUserType().equals(UserTypes.RETAILER)) {
             // From entity
             tFromMyClient.setTEntityMyClient(createService.createTEntityMyClient(from));
             tEntityMyClientValidationService.validateTEntityMyClient(tFromMyClient.getTEntityMyClient());  // tEntityMyClient validation
-            logger.info("after : {}", from.getUserType());
-            logger.info("*********************");
         }
         tFromMyClient.setFromCountry(CountryCodes.LK); //
         return tFromMyClient;

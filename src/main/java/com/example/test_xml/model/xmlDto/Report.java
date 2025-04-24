@@ -2,17 +2,12 @@ package com.example.test_xml.model.xmlDto;
 
 import com.example.test_xml.model.enums.Currencies;
 import com.example.test_xml.model.enums.ReportCodes;
-import com.example.test_xml.model.enums.ReportIndicatorTypes;
 import com.example.test_xml.model.enums.SubmissionTypes;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -62,6 +57,5 @@ public class Report {
 
     @JacksonXmlProperty(localName = "report_indicators")
     private ReportIndicator reportIndicator;
-
 
 }

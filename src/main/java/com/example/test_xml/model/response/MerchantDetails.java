@@ -3,7 +3,6 @@ package com.example.test_xml.model.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -11,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MerchantDetails extends CommonDetailsResponse{
+
     private int id;
     private String firstName;
     private String addressName;
@@ -85,4 +85,5 @@ public class MerchantDetails extends CommonDetailsResponse{
     private String utilityPaymentReference;
     private String utilityCompany;
     private String webAddress;
+
 }

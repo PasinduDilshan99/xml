@@ -63,7 +63,7 @@ public class CreateServiceImpl implements CreateService {
         fromEntity.setUrl(null);// optional --> fromEntity.setUrl(from.getWebAddress());
         fromEntity.setIncorporationState(null);
         fromEntity.setIncorporationCountryCode(CountryCodes.LK.toString()); //
-        fromEntity.setDirectorId(null); //
+        fromEntity.setDirectorId(createDirectorId(from)); //
         fromEntity.setIncorporationDate(null);
         fromEntity.setBusinessClosed(null);
         fromEntity.setDateBusinessClosed(null);
@@ -188,10 +188,13 @@ public class CreateServiceImpl implements CreateService {
         DirectorId directorId = new DirectorId();
         directorId.setGender(null);
         directorId.setTitle(null);
-        directorId.setFirstName("First Name"); //
+        if (to.getContactPerson1() != null) {
+            ExtractNameResponse extractNameResponse = preProcessService.extractFirstNameAndLastName(to.getContactPerson1());
+            directorId.setFirstName(extractNameResponse.getFirstName()); //
+            directorId.setLastName(extractNameResponse.getLastName()); //
+        }
         directorId.setMiddleName(null);
         directorId.setPrefix(null);
-        directorId.setLastName("Last Name"); //
         directorId.setBirthdate(null);
         directorId.setBirthPlace(null);
         directorId.setMothersName(null);
